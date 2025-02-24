@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter Portal - DazeeChain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="js/shelter-verification.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #e5e5e5;
+        }
+
+        .step-indicator.active {
+            background-color: #ff6b35;
+            color: white;
+        }
+
+        .step-indicator.completed {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .option-card {
+            background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+            background: #151515;
+        }
+
+        .form-input {
+            background-color: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: #ff6b35;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.2);
+            background-color: #151515;
+        }
+
+        .form-input::placeholder {
+            color: #666666;
+        }
+
+        .form-label {
+            color: #ff6b35;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-container {
+            background-color: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-divider {
+            border-color: #2a2a2a;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-hint {
+            color: #666666;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Dark theme for autofill */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #ffffff;
+            -webkit-box-shadow: 0 0 0px 1000px #0d0d0d inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            max-width: 32rem;
+            width: 90%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(255, 107, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .status-steps {
+            border-left: 2px solid #2a2a2a;
+            margin-left: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .status-step {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .status-step::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.35rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background-color: #ff6b35;
+        }
+    </style>
+</head>
+<body class="bg-black">
+    <nav class="bg-black border-b border-gray-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="text-4xl font-bold gradient-text">DazeeChain</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Option Selection -->
+    <div class="max-w-4xl mx-auto mt-12 px-4" id="optionSelection">
+        <h1 class="text-3xl font-bold text-white text-center mb-8">Welcome to the Shelter Portal</h1>
+        <p class="text-gray-400 text-center mb-12">Choose an option below to get started</p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Register Option -->
+            <div onclick="showForm('register')" class="option-card rounded-lg p-8 cursor-pointer">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-orange-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-building text-2xl text-orange-500"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-white mb-4">Register Your Shelter</h2>
+                    <p class="text-gray-400">Join DazeeChain as a verified shelter and receive monthly donations from our liquidity pool</p>
+                </div>
+            </div>
+
+            <!-- Refer Option -->
+            <div onclick="showForm('refer')" class="option-card rounded-lg p-8 cursor-pointer">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-orange-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-heart text-2xl text-orange-500"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-white mb-4">Refer a Shelter</h2>
+                    <p class="text-gray-400">Know a shelter that could benefit from DazeeChain? Let us know about them</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Form (Initially Hidden) -->
+    <div id="registrationForm" class="hidden">
+        <div class="max-w-4xl mx-auto mt-8 px-4 pb-12">
+            <button onclick="showOptions()" class="mb-6 text-orange-500 hover:text-orange-600 transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-2"></i>Back to options
+            </button>
+            
+            <div class="form-container">
+                <h2 class="section-title text-center">Register Your Shelter</h2>
+                <form id="shelterRegistrationForm" class="space-y-6">
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-semibold text-orange-500 mb-4">Basic Information</h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label class="form-label">Shelter Name</label>
+                                <input type="text" class="form-input" placeholder="Enter shelter name" required>
+                                <div class="form-hint">Official registered name of your shelter</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">EIN (Tax ID)</label>
+                                <input type="text" class="form-input" placeholder="XX-XXXXXXX" required>
+                                <div class="form-hint">Your tax identification number</div>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label class="form-label">State License Number</label>
+                                <input type="text" class="form-input" placeholder="Enter license number" required>
+                                <div class="form-hint">Your state-issued shelter license</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">USDA License (if applicable)</label>
+                                <input type="text" class="form-input" placeholder="Enter USDA license">
+                                <div class="form-hint">Required for certain animal care facilities</div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider"></div>
+
+                        <h3 class="text-xl font-semibold text-orange-500 mb-4">Contact Information</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label class="form-label">Contact Name</label>
+                                <input type="text" class="form-input" placeholder="Full name" required>
+                                <div class="form-hint">Primary contact person</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-input" placeholder="email@shelter.org" required>
+                                <div class="form-hint">Official shelter email address</div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider"></div>
+
+                        <div class="flex justify-end space-x-4">
+                            <button type="button" class="px-6 py-2 border border-orange-500 text-orange-500 rounded-lg hover:bg-gray-900 transition-colors duration-200">Cancel</button>
+                            <button type="submit" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-200">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Form (Initially Hidden) -->
+    <div id="referralForm" class="hidden">
+        <div class="max-w-2xl mx-auto mt-8 px-4">
+            <button onclick="showOptions()" class="mb-6 text-orange-500 hover:text-orange-600">
+                <i class="fas fa-arrow-left mr-2"></i>Back to options
+            </button>
+            <div class="bg-gray-800 rounded-lg p-8">
+                <h1 class="text-3xl font-bold text-white mb-6">Refer a Shelter</h1>
+                <p class="text-gray-400 mb-8">Know a local animal shelter that could benefit from DazeeChain? Let us know about them, and we'll reach out with information about our project.</p>
+
+                <!-- Referral Form Content (from refer-shelter.html) -->
+                <div id="referralFormContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="text-center">
+                <div class="checkmark-circle">
+                    <i class="fas fa-check text-4xl text-orange-500"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Registration Received!</h3>
+                <p class="text-gray-400 mb-6">Thank you for your interest in joining DazeeChain. Your registration is being processed.</p>
+            </div>
+            
+            <div class="status-steps mb-8">
+                <div class="status-step">
+                    <h4 class="text-orange-500 font-semibold mb-1">Verification Process Started</h4>
+                    <p class="text-gray-400 text-sm">Our AI system is analyzing your shelter's information</p>
+                </div>
+                <div class="status-step">
+                    <h4 class="text-orange-500 font-semibold mb-1">Documentation Review</h4>
+                    <p class="text-gray-400 text-sm">We'll verify your licenses and certifications</p>
+                </div>
+                <div class="status-step">
+                    <h4 class="text-orange-500 font-semibold mb-1">Community Check</h4>
+                    <p class="text-gray-400 text-sm">Analyzing community feedback and reputation</p>
+                </div>
+                <div class="status-step">
+                    <h4 class="text-orange-500 font-semibold mb-1">Final Approval</h4>
+                    <p class="text-gray-400 text-sm">Our team will make the final verification decision</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-900 rounded-lg p-4 mb-6">
+                <p class="text-sm text-gray-400"><i class="fas fa-clock text-orange-500 mr-2"></i>Average verification time: 2-3 business days</p>
+            </div>
+
+            <div class="text-center">
+                <p class="text-gray-400 mb-4">We'll send updates to: <span class="text-white" id="confirmationEmail"></span></p>
+                <button onclick="closeConfirmationModal()" class="bg-orange-500 text-white px-8 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-200">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showForm(type) {
+            document.getElementById('optionSelection').classList.add('hidden');
+            if (type === 'register') {
+                document.getElementById('registrationForm').classList.remove('hidden');
+                // Load registration form content
+                fetch('register-shelter.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const formContent = doc.getElementById('shelterRegistrationForm');
+                        document.getElementById('registrationFormContent').innerHTML = formContent.outerHTML;
+                        // Reinitialize any necessary JavaScript
+                        initializeRegistrationForm();
+                    });
+            } else {
+                document.getElementById('referralForm').classList.remove('hidden');
+                // Load referral form content
+                fetch('refer-shelter.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const formContent = doc.getElementById('shelterReferralForm');
+                        document.getElementById('referralFormContent').innerHTML = formContent.outerHTML;
+                        // Reinitialize any necessary JavaScript
+                        initializeReferralForm();
+                    });
+            }
+        }
+
+        function showOptions() {
+            document.getElementById('optionSelection').classList.remove('hidden');
+            document.getElementById('registrationForm').classList.add('hidden');
+            document.getElementById('referralForm').classList.add('hidden');
+        }
+
+        function initializeRegistrationForm() {
+            let currentStep = 1;
+            const totalSteps = 4;
+
+            function showStep(step) {
+                // Hide all steps
+                for (let i = 1; i <= totalSteps; i++) {
+                    document.getElementById(`step${i}`).classList.add('hidden');
+                    document.getElementById(`step${i}-indicator`).classList.remove('active', 'completed');
+                }
+
+                // Show current step
+                document.getElementById(`step${step}`).classList.remove('hidden');
+                document.getElementById(`step${step}-indicator`).classList.add('active');
+
+                // Update indicators for completed steps
+                for (let i = 1; i < step; i++) {
+                    document.getElementById(`step${i}-indicator`).classList.add('completed');
+                }
+
+                // Update buttons
+                document.getElementById('prevBtn').classList.toggle('hidden', step === 1);
+                document.getElementById('nextBtn').classList.toggle('hidden', step === totalSteps);
+                document.getElementById('submitBtn').classList.toggle('hidden', step !== totalSteps);
+            }
+
+            // Add event listeners
+            document.getElementById('nextBtn')?.addEventListener('click', () => {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+
+            document.getElementById('prevBtn')?.addEventListener('click', () => {
+                if (currentStep > 1) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+
+            document.getElementById('shelterRegistrationForm')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.querySelector('input[type="email"]').value;
+                // ... existing form processing ...
+                
+                // Show confirmation modal
+                showConfirmationModal(email);
+            });
+
+            // Initialize first step
+            showStep(1);
+        }
+
+        function initializeReferralForm() {
+            document.getElementById('shelterReferralForm')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                // Handle form submission (same as in refer-shelter.html)
+            });
+        }
+
+        function showConfirmationModal(email) {
+            document.getElementById('confirmationEmail').textContent = email;
+            const modal = document.getElementById('confirmationModal');
+            modal.classList.add('active');
+        }
+
+        function closeConfirmationModal() {
+            const modal = document.getElementById('confirmationModal');
+            modal.classList.remove('active');
+            // Redirect to homepage after closing
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

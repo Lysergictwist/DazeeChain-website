@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DazeeChain Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #e5e5e5;
+        }
+        
+        .dashboard-card {
+            background: #111111;
+            border: 1px solid #222222;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-bg {
+            background-color: #000000;
+            border-bottom: 1px solid #222222;
+        }
+
+        .quick-action {
+            background: #111111;
+            border: 1px solid #222222;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: #1a1a1a;
+            border-color: #ff6b35;
+        }
+    </style>
+</head>
+<body class="bg-black">
+    <!-- Navigation -->
+    <nav class="nav-bg shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-5xl font-bold gradient-text hover-scale tracking-tight">DazeeChain</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-400" id="userWalletBalance">0 DZ</span>
+                    <button class="bg-gray-900 text-orange-500 px-4 py-2 rounded-lg border border-orange-500 hover:bg-gray-800" id="userWalletAddress">
+                        <i class="fas fa-wallet mr-2"></i>Connect Wallet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4 bg-black">
+        <div class="max-w-7xl mx-auto">
+            <!-- Welcome Section -->
+            <div class="dashboard-card rounded-lg p-6 mb-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-white" id="welcomeMessage">Welcome back!</h1>
+                        <p class="text-gray-400" id="lastLogin">Last login: Recently</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-400">DazeeChain Status</p>
+                        <p class="text-green-500 font-semibold">Active</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Pets Overview -->
+                <div class="dashboard-card rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-white">My Pets</h2>
+                        <button class="text-orange-500 hover:text-orange-400">
+                            <i class="fas fa-plus-circle"></i>
+                        </button>
+                    </div>
+                    <div id="petsList" class="space-y-4">
+                        <!-- Pet cards will be added here -->
+                    </div>
+                </div>
+
+                <!-- Health Records -->
+                <div class="dashboard-card rounded-lg p-6">
+                    <h2 class="text-xl font-bold text-white mb-4">Health Records</h2>
+                    <div id="healthRecordsList" class="space-y-4">
+                        <!-- Health records will be added here -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Appointments -->
+                <div class="dashboard-card rounded-lg p-6">
+                    <h2 class="text-xl font-bold text-white mb-4">Upcoming Appointments</h2>
+                    <div id="appointmentsList" class="space-y-4">
+                        <!-- Appointments will be added here -->
+                    </div>
+                </div>
+
+                <!-- DZ Token Activity -->
+                <div class="dashboard-card rounded-lg p-6">
+                    <h2 class="text-xl font-bold text-white mb-4">Token Activity</h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Total Earned</span>
+                            <span class="font-semibold text-white">120 DZ</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">This Month</span>
+                            <span class="font-semibold text-white">25 DZ</span>
+                        </div>
+                        <div class="h-40 bg-gray-900 rounded-lg flex items-center justify-center">
+                            [Token Activity Chart]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-card rounded-lg p-6">
+                    <h2 class="text-xl font-bold text-white mb-4">Recent Activity</h2>
+                    <div id="activityList" class="space-y-4">
+                        <!-- Activity items will be added here -->
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card rounded-lg p-6">
+                    <h2 class="text-xl font-bold text-white mb-4">Quick Actions</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="showScheduleModal()" class="quick-action p-4 rounded-lg text-center">
+                            <i class="fas fa-calendar-plus text-2xl text-orange-500 mb-2"></i>
+                            <p class="text-sm text-gray-300">Schedule Visit</p>
+                        </button>
+                        <button class="quick-action p-4 rounded-lg text-center">
+                            <i class="fas fa-file-medical text-2xl text-orange-500 mb-2"></i>
+                            <p class="text-sm text-gray-300">Add Record</p>
+                        </button>
+                        <a href="analytics.html" class="quick-action p-4 rounded-lg text-center">
+                            <i class="fas fa-chart-line text-2xl text-orange-500 mb-2"></i>
+                            <p class="text-sm text-gray-300">Analytics</p>
+                        </a>
+                        <button onclick="findNearbyVets()" class="quick-action p-4 rounded-lg text-center">
+                            <i class="fas fa-search text-2xl text-orange-500 mb-2"></i>
+                            <p class="text-sm text-gray-300">Find Vet</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div id="scheduleModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
+        <div class="dashboard-card rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white">Schedule a Vet Visit</h3>
+                <button onclick="closeScheduleModal()" class="text-gray-400 hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="noVetInfo" class="hidden">
+                <p class="text-gray-400 mb-4">No veterinarian information found. Please add your vet's information first.</p>
+                <button onclick="closeScheduleModal()" class="w-full bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">
+                    Close
+                </button>
+            </div>
+
+            <div id="vetInfo" class="hidden">
+                <div class="mb-6">
+                    <h4 class="font-semibold text-white mb-2">Your Veterinarian</h4>
+                    <div id="vetDetails" class="text-gray-400"></div>
+                </div>
+
+                <div class="space-y-4">
+                    <button onclick="scheduleCall()" class="w-full bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">
+                        <i class="fas fa-phone-alt mr-2"></i>Call Now
+                    </button>
+                    <button onclick="scheduleEmail()" class="w-full border border-orange-500 text-orange-500 py-2 px-4 rounded hover:bg-gray-900">
+                        <i class="fas fa-envelope mr-2"></i>Send Email
+                    </button>
+                    <button onclick="searchOnline()" class="w-full bg-gray-900 text-gray-300 py-2 px-4 rounded hover:bg-gray-800">
+                        <i class="fas fa-globe mr-2"></i>Search Online
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize AOS
+        AOS.init();
+
+        // Get user data from localStorage
+        function getUserData() {
+            const storedData = localStorage.getItem('dazeeChainUserData');
+            if (storedData) {
+                return JSON.parse(storedData);
+            }
+            return null;
+        }
+
+        // Initialize dashboard with user data
+        function initializeDashboard() {
+            const userData = getUserData();
+            
+            if (!userData) {
+                window.location.href = 'register.html';
+                return;
+            }
+
+            // Set welcome message
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${userData.profile.firstName}!`;
+            
+            // Set wallet info
+            document.getElementById('userWalletBalance').textContent = userData.wallet.balance;
+            document.getElementById('userWalletAddress').textContent = userData.wallet.address;
+
+            // Render pets
+            const petsList = document.getElementById('petsList');
+            petsList.innerHTML = ''; // Clear existing content
+            userData.pets.forEach(pet => {
+                const petCard = createPetCard(pet);
+                petsList.appendChild(petCard);
+            });
+
+            // Render health records
+            const healthRecordsList = document.getElementById('healthRecordsList');
+            healthRecordsList.innerHTML = ''; // Clear existing content
+            userData.pets.forEach(pet => {
+                if (pet.healthRecords && pet.healthRecords.length > 0) {
+                    pet.healthRecords.forEach(record => {
+                        const recordElement = createHealthRecordElement(pet.name, record);
+                        healthRecordsList.appendChild(recordElement);
+                    });
+                }
+            });
+
+            // Render recent activity
+            const activityList = document.getElementById('activityList');
+            activityList.innerHTML = ''; // Clear existing content
+            if (userData.recentActivity) {
+                userData.recentActivity.forEach(activity => {
+                    const activityElement = createActivityElement(activity);
+                    activityList.appendChild(activityElement);
+                });
+            }
+        }
+
+        function createPetCard(pet) {
+            const div = document.createElement('div');
+            div.className = 'bg-gray-900 rounded-lg p-4';
+            div.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-lg text-white">${pet.name}</h3>
+                        <p class="text-gray-400">${pet.species} - ${pet.breed}</p>
+                        <p class="text-sm text-gray-500">Born: ${pet.dateOfBirth}</p>
+                    </div>
+                    <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded">Active</span>
+                </div>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-400">Microchip: ${pet.microchipNumber || 'N/A'}</p>
+                </div>
+            `;
+            return div;
+        }
+
+        function createHealthRecordElement(petName, record) {
+            const div = document.createElement('div');
+            div.className = 'bg-gray-900 rounded-lg p-4';
+            
+            const vaccinations = Object.entries(record.vaccinations)
+                .filter(([key, value]) => value)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(', ');
+
+            div.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="font-semibold text-white">${petName}</p>
+                        <p class="text-sm text-gray-400">Vaccinations: ${vaccinations}</p>
+                        ${record.medicalConditions ? `<p class="text-sm text-gray-400">Conditions: ${record.medicalConditions}</p>` : ''}
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        function createActivityElement(activity) {
+            const div = document.createElement('div');
+            div.className = 'bg-gray-900 rounded-lg p-4';
+            div.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="bg-gray-800 p-2 rounded-full">
+                        <i class="fas fa-paw text-orange-500"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-white">${activity.action}</p>
+                        <p class="text-sm text-gray-400">${activity.description}</p>
+                        <p class="text-xs text-gray-500">${activity.date}</p>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        function findNearbyVets() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    
+                    // Open Google Maps with search for veterinarians near the current location
+                    const searchQuery = "veterinarians near me";
+                    const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}/@${latitude},${longitude},13z`;
+                    window.open(mapsUrl, '_blank');
+                }, function(error) {
+                    // If geolocation fails, just search for vets without location
+                    const searchQuery = "veterinarians";
+                    const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}`;
+                    window.open(mapsUrl, '_blank');
+                });
+            } else {
+                // If geolocation is not supported, just search for vets without location
+                const searchQuery = "veterinarians";
+                const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(searchQuery)}`;
+                window.open(mapsUrl, '_blank');
+            }
+        }
+
+        function showScheduleModal() {
+            const userData = getUserData();
+            const modal = document.getElementById('scheduleModal');
+            const noVetInfo = document.getElementById('noVetInfo');
+            const vetInfo = document.getElementById('vetInfo');
+            const vetDetails = document.getElementById('vetDetails');
+
+            modal.style.display = 'flex';
+
+            if (userData && userData.pets && userData.pets[0] && userData.pets[0].healthRecords && userData.pets[0].healthRecords[0].vetInfo) {
+                const vetInfo = userData.pets[0].healthRecords[0].vetInfo;
+                document.getElementById('vetInfo').classList.remove('hidden');
+                document.getElementById('noVetInfo').classList.add('hidden');
+                vetDetails.innerHTML = `
+                    <p class="mb-2">${vetInfo}</p>
+                `;
+            } else {
+                document.getElementById('vetInfo').classList.add('hidden');
+                document.getElementById('noVetInfo').classList.remove('hidden');
+            }
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('scheduleModal').style.display = 'none';
+        }
+
+        function scheduleCall() {
+            const userData = getUserData();
+            if (userData && userData.pets && userData.pets[0] && userData.pets[0].healthRecords && userData.pets[0].healthRecords[0].vetInfo) {
+                // Extract phone number using regex
+                const phoneMatch = userData.pets[0].healthRecords[0].vetInfo.match(/[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}/);
+                if (phoneMatch) {
+                    window.location.href = `tel:${phoneMatch[0]}`;
+                } else {
+                    alert('No phone number found in vet information');
+                }
+            }
+        }
+
+        function scheduleEmail() {
+            const userData = getUserData();
+            if (userData && userData.pets && userData.pets[0] && userData.pets[0].healthRecords && userData.pets[0].healthRecords[0].vetInfo) {
+                // Extract email using regex
+                const emailMatch = userData.pets[0].healthRecords[0].vetInfo.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+                if (emailMatch) {
+                    const subject = encodeURIComponent('Appointment Request');
+                    const body = encodeURIComponent('I would like to schedule an appointment for my pet.');
+                    window.location.href = `mailto:${emailMatch[0]}?subject=${subject}&body=${body}`;
+                } else {
+                    alert('No email found in vet information');
+                }
+            }
+        }
+
+        function searchOnline() {
+            const userData = getUserData();
+            if (userData && userData.pets && userData.pets[0] && userData.pets[0].healthRecords && userData.pets[0].healthRecords[0].vetInfo) {
+                const vetInfo = userData.pets[0].healthRecords[0].vetInfo;
+                const searchQuery = encodeURIComponent(vetInfo);
+                window.open(`https://www.google.com/search?q=${searchQuery}`, '_blank');
+            }
+        }
+
+        // Initialize the dashboard when the page loads
+        window.addEventListener('load', initializeDashboard);
+    </script>
+</body>
+</html>

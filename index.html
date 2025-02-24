@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DazeeChain - Revolutionizing Pet Adoption with Blockchain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #e5e5e5;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+
+        .hover-scale {
+            transition: transform 0.2s;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-card {
+            background: #111111;
+            border: 1px solid #222222;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+            background: #161616;
+        }
+
+        .nav-bg {
+            background-color: #000000;
+            border-bottom: 1px solid #222222;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .feature-card {
+            background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b35;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.1);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            background: rgba(255, 107, 53, 0.2);
+        }
+
+        .feature-icon i {
+            font-size: 1.75rem;
+            color: #ff6b35;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-list li {
+            color: #999999;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .feature-list li::before {
+            content: '•';
+            color: #ff6b35;
+            margin-right: 0.5rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding-top: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b35, #ff8f35);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: #999999;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bg shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 relative">
+            <div class="flex justify-between items-center h-16">
+                <!-- Left Section -->
+                <div class="flex items-center space-x-6">
+                    <a href="login.html" class="text-orange-500 hover:text-orange-400 transition-colors duration-200">
+                        <i class="fas fa-user-circle mr-2"></i>Login
+                    </a>
+                    <div class="flex items-center space-x-2 bg-opacity-20 bg-orange-500 rounded-lg px-3 py-1">
+                        <img src="images/dazee-icon.png" alt="DZ" class="w-6 h-6">
+                        <span class="text-orange-500 font-medium">DZ: $0.0234</span>
+                        <span class="text-green-500 text-sm">+5.2%</span>
+                    </div>
+                </div>
+                
+                <!-- Center Logo -->
+                <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <a href="index.html" class="text-5xl font-bold gradient-text hover-scale tracking-tight">DazeeChain</a>
+                </div>
+                
+                <!-- Right Section -->
+                <div class="flex items-center space-x-4">
+                    <a href="shelter-portal.html" class="text-orange-500 hover:text-orange-400 transition-colors duration-200">
+                        <i class="fas fa-building mr-2"></i>Shelter Portal
+                    </a>
+                    <a href="whitepaper.html" class="text-orange-500 hover:text-orange-400 transition-colors duration-200">
+                        <i class="fas fa-book mr-2"></i>Whitepaper
+                    </a>
+                    <a href="register.html" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-200">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-20 bg-black">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center">
+                <div class="mb-12 flex justify-center">
+                    <img src="images/dazee.jpg" alt="Dazee - Our Inspiration" class="rounded-full w-48 h-48 object-cover shadow-lg border-4 border-orange-500" title="Meet Dazee - The inspiration behind DazeeChain">
+                </div>
+                <h1 class="text-5xl font-bold mb-6 text-white">Revolutionizing Pet Adoption with <span class="gradient-text">Blockchain Technology and AI</span></h1>
+                <p class="text-xl text-gray-400 mb-12">The first comprehensive ecosystem for pet adoption, health records, and shelter support powered by DazeeCoin (DZ) and PawPrintz™</p>
+                <div class="flex justify-center">
+                    <a href="shelter-portal.html" class="inline-block bg-orange-500 text-white px-16 py-6 rounded-lg hover:bg-orange-600 transition duration-200 text-2xl font-bold transform hover:scale-105">
+                        Register Shelter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Section -->
+    <section class="py-20 bg-black border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">The DazeeChain <span class="gradient-text">Ecosystem</span></h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="feature-card rounded-lg p-8">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-orange-500">DazeeCoin (DZ)</h3>
+                    <p class="text-gray-400 mb-4">
+                        Native cryptocurrency built on Polygon for low fees and fast transactions. DZ incentivizes responsible pet ownership and supports animal welfare.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-400 space-y-2">
+                        <li>1 Billion DZ total supply</li>
+                        <li>Built on Polygon (Ethereum L2)</li>
+                        <li>Deflationary tokenomics</li>
+                        <li>Real-world utility focused</li>
+                    </ul>
+                </div>
+                <div class="feature-card rounded-lg p-8">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-orange-500">PawPrintz™</h3>
+                    <p class="text-gray-400 mb-4">
+                        Blockchain-powered digital record system that securely stores and manages your pet's complete identity and health history.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-400 space-y-2">
+                        <li>Verified adoption records</li>
+                        <li>Secure vet history</li>
+                        <li>Vaccination tracking</li>
+                        <li>Owner-controlled sharing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20 bg-black border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">How It <span class="gradient-text">Works</span></h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card rounded-lg p-6">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Adoption Rewards</h3>
+                    <p class="text-gray-400">Earn DZ for adopting pets and maintaining their health with vaccinations, spaying/neutering, and regular checkups</p>
+                </div>
+                
+                <div class="feature-card rounded-lg p-6">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-notes-medical"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Health Records</h3>
+                    <p class="text-gray-400">Earn DZ rewards for maintaining updated health records on PawPrintz™</p>
+                </div>
+                
+                <div class="feature-card rounded-lg p-6">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-clinic-medical"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Ecosystem made for vets</h3>
+                    <p class="text-gray-400">Earn DZ for regular checkups, coming soon!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-black py-16">
+        <div class="container mx-auto px-4">
+            <div class="section-header">
+                <h2 class="section-title">DazeeChain Features, Benefits, and Vision</h2>
+                <p class="section-subtitle">Empowering animal welfare through innovative technology, community engagement, and secure pet management solutions</p>
+            </div>
+
+            <div class="features-grid">
+                <!-- Adoption Support -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="feature-title">Adoption Support & Incentives</h3>
+                    <ul class="feature-list">
+                        <li>Adoption rewards in DazeeCoin</li>
+                        <li>Digital adoption certificates</li>
+                        <li>Adoption history tracking</li>
+                        <li>Post-adoption support resources</li>
+                    </ul>
+                </div>
+
+                <!-- Pet Care & Health -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3 class="feature-title">Pet Care & Health</h3>
+                    <ul class="feature-list">
+                        <li>Secure digital health records</li>
+                        <li>Personal pet passport system</li>
+                        <li>Vet visit scheduling</li>
+                        <li>Emergency medical alerts</li>
+                    </ul>
+                </div>
+
+                <!-- Lost Pet Recovery -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search-location"></i>
+                    </div>
+                    <h3 class="feature-title">Lost Pet Recovery Network</h3>
+                    <ul class="feature-list">
+                        <li>Digital ID system</li>
+                        <li>Real-time lost pet alerts</li>
+                        <li>Community search network</li>
+                        <li>Smart QR code pet tags</li>
+                    </ul>
+                </div>
+
+                <!-- Shelter Support -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3 class="feature-title">Shelter Support System</h3>
+                    <ul class="feature-list">
+                        <li>Direct donations</li>
+                        <li>Resource management</li>
+                        <li>Emergency fund access</li>
+                        <li>Shelter network sharing</li>
+                    </ul>
+                </div>
+
+                <!-- Community Engagement -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Community Engagement</h3>
+                    <ul class="feature-list">
+                        <li>Volunteer coordination</li>
+                        <li>Foster care network</li>
+                        <li>Community events</li>
+                        <li>Business partnerships</li>
+                    </ul>
+                </div>
+
+                <!-- Technology -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Technology & Innovation</h3>
+                    <ul class="feature-list">
+                        <li>Secure user profiles</li>
+                        <li>Cross-platform mobile app</li>
+                        <li>Cloud data backup</li>
+                        <li>Offline access support</li>
+                    </ul>
+                </div>
+
+                <!-- Financial Benefits -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3 class="feature-title">Financial Benefits</h3>
+                    <ul class="feature-list">
+                        <li>DazeeCoin rewards</li>
+                        <li>Donation tracking</li>
+                        <li>Expense management</li>
+                        <li>Tax documentation</li>
+                    </ul>
+                </div>
+
+                <!-- Data & Analytics -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Data & Analytics</h3>
+                    <ul class="feature-list">
+                        <li>Personal pet analytics</li>
+                        <li>Health trend tracking</li>
+                        <li>Custom reports</li>
+                        <li>Data visualization</li>
+                    </ul>
+                </div>
+
+                <!-- Education -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="feature-title">Education & Training</h3>
+                    <ul class="feature-list">
+                        <li>Pet care tutorials</li>
+                        <li>Training resources</li>
+                        <li>Best practices guides</li>
+                        <li>Community workshops</li>
+                    </ul>
+                </div>
+
+                <!-- Security -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Privacy & Security</h3>
+                    <ul class="feature-list">
+                        <li>End-to-end encryption</li>
+                        <li>User data control</li>
+                        <li>Private information vault</li>
+                        <li>Regular security updates</li>
+                    </ul>
+                </div>
+
+                <!-- User Experience -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="feature-title">User Experience</h3>
+                    <ul class="feature-list">
+                        <li>Intuitive interface</li>
+                        <li>Quick data access</li>
+                        <li>Customizable profiles</li>
+                        <li>Multi-device sync</li>
+                    </ul>
+                </div>
+
+                <!-- Future Growth -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="feature-title">Future Growth</h3>
+                    <ul class="feature-list">
+                        <li>Feature expansion</li>
+                        <li>Network growth</li>
+                        <li>Enhanced security</li>
+                        <li>Community-driven updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics -->
+    <section class="py-20 bg-black border-t border-gray-900" id="tokenomics">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">Token<span class="gradient-text">omics</span></h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card rounded-lg p-6">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Shelter Support</h3>
+                    <p class="text-gray-400">40% of tokens allocated to verified shelter monthly distributions</p>
+                </div>
+                
+                <div class="feature-card rounded-lg p-6">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Liquidity Pool</h3>
+                    <p class="text-gray-400">30% of tokens locked in liquidity pool for 2 years</p>
+                </div>
+                
+                <div class="feature-card rounded-lg p-6">
+                    <div class="text-orange-500 text-4xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-white">Community Growth</h3>
+                    <p class="text-gray-400">30% reserved for marketing, development, and community initiatives</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy & Security -->
+    <section class="py-20 bg-black border-t border-gray-900" id="privacy">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">Privacy & Security</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="feature-card rounded-lg p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-orange-500">Hybrid Blockchain Technology</h3>
+                    <p class="text-gray-400">
+                        DazeeChain uses PRNDL's Hybrid Private Data Storage System (HPDSS) to ensure:
+                    </p>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-gray-400">
+                        <li>Sensitive data remains private</li>
+                        <li>Transparent donation tracking</li>
+                        <li>Immutable health records</li>
+                    </ul>
+                </div>
+                <div class="feature-card rounded-lg p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-orange-500">Data Protection</h3>
+                    <p class="text-gray-400">
+                        Your privacy is our priority. PawPrintz ensures:
+                    </p>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-gray-400">
+                        <li>End-to-end encryption</li>
+                        <li>Granular access control</li>
+                        <li>GDPR compliance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="gradient-text text-2xl mb-4">DazeeChain</h3>
+                    <p class="text-gray-400">Revolutionizing pet adoption through blockchain technology</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-orange-500">Home</a></li>
+                        <li><a href="#tokenomics" class="hover:text-orange-500">Tokenomics</a></li>
+                        <li><a href="#privacy" class="hover:text-orange-500">Privacy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4 text-gray-400">
+                        <a href="#" class="hover:text-orange-500"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="hover:text-orange-500"><i class="fab fa-discord text-2xl"></i></a>
+                        <a href="#" class="hover:text-orange-500"><i class="fab fa-telegram text-2xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-900 text-center text-gray-400">
+                <p>&copy; 2025 DazeeChain. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

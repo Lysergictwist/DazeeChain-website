@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DazeeChain Whitepaper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #e5e5e5;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .whitepaper-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .whitepaper-content h1,
+        .whitepaper-content h2 {
+            color: #ff6b35;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .whitepaper-content h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid #2d2d2d;
+            padding-bottom: 0.5rem;
+        }
+
+        .whitepaper-content h2 {
+            font-size: 2rem;
+            border-bottom: 1px solid #2d2d2d;
+            padding-bottom: 0.5rem;
+        }
+
+        .whitepaper-content h3 {
+            color: #ff8f35;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .whitepaper-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: #e5e5e5;
+        }
+
+        .whitepaper-content ul {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            list-style-type: disc;
+            color: #e5e5e5;
+        }
+
+        .whitepaper-content ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .whitepaper-content strong {
+            color: #ff8f35;
+            font-weight: 600;
+        }
+
+        .whitepaper-content a {
+            color: #ff6b35;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .whitepaper-content a:hover {
+            color: #ff8f35;
+            text-decoration: underline;
+        }
+
+        .table-of-contents {
+            background: #111111;
+            border: 1px solid #2d2d2d;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .table-of-contents ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .table-of-contents li {
+            margin-bottom: 0.5rem;
+        }
+
+        .table-of-contents a {
+            color: #e5e5e5;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .table-of-contents a:hover {
+            color: #ff6b35;
+        }
+
+        .download-button {
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            transition: all 0.3s ease;
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-4xl font-bold gradient-text">DazeeChain</a>
+                <div class="flex items-center space-x-4">
+                    <a href="#" onclick="window.print()" class="text-orange-500 hover:text-orange-400 transition-colors duration-200">
+                        <i class="fas fa-print mr-2"></i>Print
+                    </a>
+                    <a href="docs/DazeeChain_Whitepaper.md" download class="download-button text-white px-6 py-2 rounded-lg">
+                        <i class="fas fa-download mr-2"></i>Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Whitepaper Content -->
+    <div class="pt-20 whitepaper-container">
+        <div class="whitepaper-content">
+            <h1>DazeeChain Whitepaper</h1>
+            <p class="text-gray-400 mb-8">Version 1.0 - February 2025</p>
+
+            <div class="table-of-contents">
+                <h3 class="text-xl font-bold mb-4">Table of Contents</h3>
+                <ul>
+                    <li><a href="#executive-summary">Executive Summary</a></li>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#vision-mission">Vision & Mission</a></li>
+                    <li><a href="#ecosystem">The DazeeChain Ecosystem</a></li>
+                    <li><a href="#tokenomics">DazeeCoin (DZ) Tokenomics</a></li>
+                    <li><a href="#technology">Technology Infrastructure</a></li>
+                    <li><a href="#features">Platform Features</a></li>
+                    <li><a href="#revenue">Revenue Model</a></li>
+                    <li><a href="#roadmap">Roadmap</a></li>
+                    <li><a href="#team">Team & Governance</a></li>
+                </ul>
+            </div>
+
+            <h2 id="executive-summary">Executive Summary</h2>
+            <p>DazeeChain represents a revolutionary approach to animal welfare, combining innovative technology with community engagement to create a comprehensive ecosystem for pet adoption, shelter management, and animal care. At its core, DazeeChain aims to solve critical challenges in the animal welfare sector through a unified platform powered by DazeeCoin (DZ), our utility token designed to incentivize and reward positive actions within the ecosystem.</p>
+
+            <h2 id="introduction">Introduction</h2>
+            <p>The animal welfare sector faces numerous challenges:</p>
+            <ul>
+                <li>Limited resources for shelters</li>
+                <li>Inefficient donation distribution</li>
+                <li>Lack of standardized pet records</li>
+                <li>Difficulty in verifying legitimate shelters</li>
+                <li>Complex adoption processes</li>
+                <li>Limited post-adoption support</li>
+            </ul>
+            <p>DazeeChain addresses these challenges through a comprehensive digital ecosystem that connects shelters, adopters, and supporters while ensuring transparency, efficiency, and trust.</p>
+
+            <h2 id="vision-mission">Vision & Mission</h2>
+            <h3>Vision</h3>
+            <p>To create a world where every animal finds a loving home, and every shelter has the resources they need to provide optimal care.</p>
+
+            <h3>Mission</h3>
+            <p>To revolutionize animal welfare by:</p>
+            <ul>
+                <li>Empowering shelters with modern tools and sustainable funding</li>
+                <li>Simplifying and securing the adoption process</li>
+                <li>Creating a transparent and efficient donation system</li>
+                <li>Building a supportive community around animal welfare</li>
+            </ul>
+
+            <h2 id="ecosystem">The DazeeChain Ecosystem</h2>
+            <h3>Core Components</h3>
+            <ol>
+                <li>
+                    <strong>Shelter Network</strong>
+                    <ul>
+                        <li>Verified shelter profiles</li>
+                        <li>Resource sharing platform</li>
+                        <li>Emergency fund access</li>
+                        <li>Community support system</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Pet Management System</strong>
+                    <ul>
+                        <li>Digital health records</li>
+                        <li>Adoption history tracking</li>
+                        <li>Lost pet recovery network</li>
+                        <li>Microchip integration</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h2 id="tokenomics">DazeeCoin (DZ) Tokenomics</h2>
+            <h3>Token Utility</h3>
+            <p>DazeeCoin (DZ) serves as the primary utility token within the DazeeChain ecosystem:</p>
+            <ol>
+                <li>
+                    <strong>Rewards & Incentives</strong>
+                    <ul>
+                        <li>Adoption completion rewards</li>
+                        <li>Volunteer participation rewards</li>
+                        <li>Shelter verification rewards</li>
+                        <li>Community contribution rewards</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Token Distribution</h3>
+            <p>Total Supply: 1,000,000,000 DZ</p>
+            <ul>
+                <li>40% - Community & Adoption Rewards</li>
+                <li>20% - Platform Development</li>
+                <li>15% - Marketing & Partnerships</li>
+                <li>10% - Team & Advisors</li>
+                <li>10% - Liquidity Pool</li>
+                <li>5% - Emergency Fund</li>
+            </ul>
+
+            <h2 id="technology">Technology Infrastructure</h2>
+            <h3>Current Implementation</h3>
+            <ul>
+                <li>Secure user profiles</li>
+                <li>Cloud-based data storage</li>
+                <li>End-to-end encryption</li>
+                <li>Cross-platform compatibility</li>
+                <li>Offline access support</li>
+            </ul>
+
+            <h2 id="features">Platform Features</h2>
+            <h3>Key Features</h3>
+            <ul>
+                <li>Digital adoption certificates</li>
+                <li>Pet health tracking</li>
+                <li>Community engagement tools</li>
+                <li>Resource management</li>
+                <li>Analytics and reporting</li>
+            </ul>
+
+            <h2 id="revenue">Revenue Model</h2>
+            <h3>Primary Revenue Streams</h3>
+            <ol>
+                <li>Platform Fees (2.5% on donations)</li>
+                <li>Premium Features</li>
+                <li>Partnership Programs</li>
+                <li>Data Analytics Services</li>
+            </ol>
+
+            <h2 id="roadmap">Roadmap</h2>
+            <h3>Development Timeline</h3>
+            <ul>
+                <li>Phase 1 (Current) - Platform Launch</li>
+                <li>Phase 2 (Q3 2025) - Mobile App & Analytics</li>
+                <li>Phase 3 (Q1 2026) - Blockchain Integration</li>
+                <li>Phase 4 (Q4 2026) - Global Expansion</li>
+            </ul>
+
+            <h2 id="team">Team & Governance</h2>
+            <h3>Governance Structure</h3>
+            <ul>
+                <li>Community-driven decision making</li>
+                <li>Transparent operational processes</li>
+                <li>Regular stakeholder meetings</li>
+                <li>Open feedback channels</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Shelter - DazeeChain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="js/shelter-verification.js"></script>
+    <style>
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .step-indicator.active {
+            background-color: #f97316;
+            color: white;
+        }
+        .step-indicator.completed {
+            background-color: #22c55e;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-orange-500">DazeeChain</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto mt-8 px-4">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Shelter Registration</h1>
+
+        <!-- Progress Steps -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <div class="step-indicator active" id="step1-indicator">1</div>
+                <div class="h-1 w-16 bg-gray-200 mx-2"></div>
+                <div class="step-indicator" id="step2-indicator">2</div>
+                <div class="h-1 w-16 bg-gray-200 mx-2"></div>
+                <div class="step-indicator" id="step3-indicator">3</div>
+                <div class="h-1 w-16 bg-gray-200 mx-2"></div>
+                <div class="step-indicator" id="step4-indicator">4</div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="shelterRegistrationForm" class="space-y-6">
+            <!-- Step 1: Basic Information -->
+            <div id="step1" class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Basic Information</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="shelterName">Shelter Name</label>
+                        <input type="text" id="shelterName" required
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="ein">EIN (Tax ID)</label>
+                        <input type="text" id="ein" required pattern="[0-9]{2}-[0-9]{7}"
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                               placeholder="XX-XXXXXXX">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="stateLicense">State License Number</label>
+                        <input type="text" id="stateLicense" required
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="usdaLicense">USDA License (if applicable)</label>
+                        <input type="text" id="usdaLicense"
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Location & Contact -->
+            <div id="step2" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                <h2 class="text-xl font-semibold mb-4">Location & Contact Information</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="address">Physical Address</label>
+                        <input type="text" id="address" required
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="city">City</label>
+                            <input type="text" id="city" required
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="state">State</label>
+                            <select id="state" required
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                <option value="">Select State</option>
+                                <option value="CA">California</option>
+                                <option value="NY">New York</option>
+                                <!-- Add other states -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="zip">ZIP Code</label>
+                            <input type="text" id="zip" required pattern="[0-9]{5}"
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="email">Email Address</label>
+                            <input type="email" id="email" required
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="website">Website</label>
+                            <input type="url" id="website"
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="socialMedia">Social Media URL</label>
+                            <input type="url" id="socialMedia"
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Documentation Upload -->
+            <div id="step3" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                <h2 class="text-xl font-semibold mb-4">Required Documentation</h2>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2">501(c)(3) Documentation</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                            <input type="file" id="taxExemptDocs" multiple accept=".pdf,.jpg,.png" class="hidden">
+                            <label for="taxExemptDocs" class="cursor-pointer text-center block">
+                                <i class="fas fa-cloud-upload-alt text-2xl text-orange-500"></i>
+                                <p class="mt-2">Upload 501(c)(3) determination letter and Form 990</p>
+                                <p class="text-sm text-gray-500">PDF, JPG, or PNG files only</p>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">State License & Inspection Reports</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                            <input type="file" id="licenseDocs" multiple accept=".pdf,.jpg,.png" class="hidden">
+                            <label for="licenseDocs" class="cursor-pointer text-center block">
+                                <i class="fas fa-cloud-upload-alt text-2xl text-orange-500"></i>
+                                <p class="mt-2">Upload state license and recent inspection reports</p>
+                                <p class="text-sm text-gray-500">PDF, JPG, or PNG files only</p>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 mb-2">Facility Photos</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                            <input type="file" id="facilityPhotos" multiple accept="image/*" class="hidden">
+                            <label for="facilityPhotos" class="cursor-pointer text-center block">
+                                <i class="fas fa-cloud-upload-alt text-2xl text-orange-500"></i>
+                                <p class="mt-2">Upload photos of your facility</p>
+                                <p class="text-sm text-gray-500">At least 5 photos showing different areas</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: References & Verification -->
+            <div id="step4" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                <h2 class="text-xl font-semibold mb-4">References & Final Verification</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-semibold mb-2">Veterinary References</h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Veterinarian Name</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">License Number</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Contact Information</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                                       placeholder="Phone or Email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-semibold mb-2">Partner Shelter References</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Shelter Name</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Contact Person</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Contact Information</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                                           placeholder="Phone or Email">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-semibold mb-2">Verification Process</h3>
+                        <p class="text-sm text-gray-600">
+                            By submitting this form, you agree to our verification process which includes:
+                        </p>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-2">
+                            <li>AI-powered document authenticity verification</li>
+                            <li>Cross-referencing with government databases</li>
+                            <li>Physical location verification</li>
+                            <li>Reference checks with provided contacts</li>
+                            <li>Online presence verification</li>
+                            <li>Blockchain-based verification record creation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between">
+                <button type="button" id="prevBtn" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 hidden">
+                    Previous
+                </button>
+                <button type="button" id="nextBtn" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">
+                    Next
+                </button>
+                <button type="submit" id="submitBtn" class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 hidden">
+                    Submit for Verification
+                </button>
+            </div>
+        </form>
+
+        <!-- Verification Status Modal -->
+        <div id="verificationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold mb-4">Verification in Progress</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-spinner fa-spin text-white"></i>
+                        </div>
+                        <span class="ml-3" id="verificationStatus">Processing your submission...</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">Verification Steps:</h3>
+                        <ul class="space-y-2" id="verificationSteps">
+                            <li class="flex items-center">
+                                <i class="fas fa-circle-notch fa-spin text-orange-500 mr-2"></i>
+                                Document Analysis
+                            </li>
+                            <li class="text-gray-500">Tax Status Verification</li>
+                            <li class="text-gray-500">License Verification</li>
+                            <li class="text-gray-500">Reference Checks</li>
+                            <li class="text-gray-500">Blockchain Registration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function showStep(step) {
+            // Hide all steps
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.add('hidden');
+                document.getElementById(`step${i}-indicator`).classList.remove('active', 'completed');
+            }
+
+            // Show current step
+            document.getElementById(`step${step}`).classList.remove('hidden');
+            document.getElementById(`step${step}-indicator`).classList.add('active');
+
+            // Update indicators for completed steps
+            for (let i = 1; i < step; i++) {
+                document.getElementById(`step${i}-indicator`).classList.add('completed');
+            }
+
+            // Update buttons
+            document.getElementById('prevBtn').classList.toggle('hidden', step === 1);
+            document.getElementById('nextBtn').classList.toggle('hidden', step === totalSteps);
+            document.getElementById('submitBtn').classList.toggle('hidden', step !== totalSteps);
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+
+        document.getElementById('shelterRegistrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Show verification modal
+            document.getElementById('verificationModal').classList.remove('hidden');
+
+            try {
+                // Collect form data
+                const formData = {
+                    name: document.getElementById('shelterName').value,
+                    ein: document.getElementById('ein').value,
+                    licenseNumber: document.getElementById('stateLicense').value,
+                    address: document.getElementById('address').value,
+                    // ... collect other form fields ...
+                    documents: {
+                        // In production, this would be actual file data
+                        tax_exempt: ['501c3_letter.pdf'],
+                        state_license: ['license.pdf'],
+                        facility_photos: ['facility1.jpg', 'facility2.jpg']
+                    }
+                };
+
+                // Perform verification
+                const verificationResult = await ShelterVerification.verifyShelter(formData);
+
+                // Update verification status
+                document.getElementById('verificationStatus').textContent = 
+                    verificationResult.status === 'verified' 
+                        ? 'Verification Successful!' 
+                        : 'Verification Failed';
+
+                // In production, you would handle the result appropriately
+                console.log('Verification Result:', verificationResult);
+
+            } catch (error) {
+                console.error('Verification Error:', error);
+                document.getElementById('verificationStatus').textContent = 
+                    'An error occurred during verification. Please try again.';
+            }
+        });
+
+        // Initialize first step
+        showStep(1);
+    </script>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawPrintz - Pet Health Records</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="js/pet-health.js"></script>
+    <style>
+        .timeline-dot::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #f97316;
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 0;
+            bottom: -100%;
+            width: 2px;
+            background-color: #e5e7eb;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 9999px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-2xl font-bold text-orange-500">DazeeChain</a>
+                    <div class="hidden md:flex space-x-4">
+                        <a href="dashboard.html" class="text-gray-600 hover:text-orange-500">Dashboard</a>
+                        <a href="#" class="text-orange-500">Health Records</a>
+                        <a href="#" class="text-gray-600 hover:text-orange-500">Find Vet</a>
+                        <a href="#" class="text-gray-600 hover:text-orange-500">Rewards</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600" id="userWalletBalance">120 DZ</span>
+                    <button class="text-sm bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                        0x1234...5678
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Notifications Panel -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold">Upcoming Events</h2>
+                    <button class="text-sm text-orange-500 hover:text-orange-600">
+                        <i class="fas fa-cog"></i> Manage Notifications
+                    </button>
+                </div>
+                <ul id="notificationList" class="space-y-2">
+                    <!-- Notifications will be populated by JavaScript -->
+                </ul>
+            </div>
+
+            <!-- Pet Header -->
+            <div id="petProfile" data-pet-id="PET-123" class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-dog text-4xl text-orange-500"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-800">Max</h1>
+                            <p class="text-gray-600">Golden Retriever • 3 years old</p>
+                            <div class="mt-2 space-y-1">
+                                <p class="text-sm text-gray-500 flex items-center">
+                                    <i class="fas fa-microchip mr-2 text-orange-500"></i>
+                                    Microchip ID: 985141000123456
+                                </p>
+                                <p class="text-sm text-gray-500 flex items-center">
+                                    <i class="fas fa-tag mr-2 text-orange-500"></i>
+                                    ID Tag: DZ-MAX-2025
+                                </p>
+                                <p class="text-sm text-gray-500 flex items-center">
+                                    <i class="fas fa-passport mr-2 text-orange-500"></i>
+                                    License: NYC-2025-789456
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button onclick="openModal()" class="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">
+                            <i class="fas fa-plus mr-2"></i> Add Record
+                        </button>
+                        <button onclick="openSharingModal()" class="flex items-center px-4 py-2 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50">
+                            <i class="fas fa-share-alt mr-2"></i> Share Records
+                        </button>
+                        <button onclick="showQRCode()" class="flex items-center px-4 py-2 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50">
+                            <i class="fas fa-qrcode mr-2"></i> Show QR
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Identification Details -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-lg font-semibold mb-4">Identification History</h2>
+                <div class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Microchip Information -->
+                        <div class="bg-orange-50 p-4 rounded-lg">
+                            <h3 class="font-semibold mb-3">Microchip Details</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Chip Number:</span>
+                                    <span class="font-semibold">985141000123456</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Implant Date:</span>
+                                    <span class="font-semibold">Jan 15, 2023</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Implanted By:</span>
+                                    <span class="font-semibold">Dr. Sarah Smith</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Manufacturer:</span>
+                                    <span class="font-semibold">HomeAgain</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ID Tags History -->
+                        <div class="bg-orange-50 p-4 rounded-lg">
+                            <h3 class="font-semibold mb-3">ID Tags History</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Current Tag:</span>
+                                    <span class="font-semibold">DZ-MAX-2025</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Issue Date:</span>
+                                    <span class="font-semibold">Jan 1, 2025</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Previous Tag:</span>
+                                    <span class="font-semibold">DZ-MAX-2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Overview -->
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold mb-4">Vital Statistics</h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Weight</span>
+                            <span class="font-semibold">30.5 kg</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Height</span>
+                            <span class="font-semibold">58 cm</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Last Checkup</span>
+                            <span class="font-semibold">Feb 15, 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold mb-4">Vaccination Status</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Rabies</span>
+                            <span class="text-green-500">Up to date</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">DHPP</span>
+                            <span class="text-green-500">Up to date</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Bordetella</span>
+                            <span class="text-yellow-500">Due in 2 months</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold mb-4">Medications</h2>
+                    <div class="space-y-4">
+                        <div class="bg-orange-50 p-3 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">Heartgard Plus</p>
+                                    <p class="text-sm text-gray-600">Monthly heartworm prevention</p>
+                                </div>
+                                <span class="text-sm text-orange-500">Next: Mar 1</span>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 p-3 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">NexGard</p>
+                                    <p class="text-sm text-gray-600">Flea and tick prevention</p>
+                                </div>
+                                <span class="text-sm text-orange-500">Next: Mar 15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Timeline -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg font-semibold">Health Timeline</h2>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1 text-sm border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50">
+                            <i class="fas fa-filter mr-1"></i> Filter
+                        </button>
+                        <button class="px-3 py-1 text-sm border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50">
+                            <i class="fas fa-file-export mr-1"></i> Export
+                        </button>
+                        <button class="px-3 py-1 text-sm border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50 share-record-btn" data-record-id="REC-123">
+                            <i class="fas fa-share-alt mr-1"></i> Share
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-6 relative">
+                    <div class="ml-8 relative timeline-dot timeline-line">
+                        <div class="bg-orange-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">Annual Checkup</p>
+                                    <p class="text-sm text-gray-600">Regular wellness exam and vaccinations</p>
+                                    <div class="mt-3 space-y-2">
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-user-md w-5 text-orange-500"></i>
+                                            <span>Dr. Sarah Smith (License: NY-VET-12345)</span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-hospital w-5 text-orange-500"></i>
+                                            <span>Happy Paws Veterinary (Reg: NYC-VH-789)</span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-map-marker-alt w-5 text-orange-500"></i>
+                                            <span>123 Pet Care Lane, New York, NY 10001</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p class="text-sm font-semibold text-gray-700">Procedures Performed:</p>
+                                        <ul class="mt-1 text-sm text-gray-600 list-disc list-inside">
+                                            <li>Annual physical examination</li>
+                                            <li>DHPP vaccination (Lot: VAX-2025-456)</li>
+                                            <li>Blood work panel</li>
+                                            <li>Weight check and body condition scoring</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-500">Feb 15, 2025</span>
+                            </div>
+                            <div class="mt-3 flex items-center space-x-2">
+                                <button class="text-sm text-orange-500 hover:text-orange-600">
+                                    <i class="fas fa-file-pdf mr-1"></i> View Report
+                                </button>
+                                <button class="text-sm text-orange-500 hover:text-orange-600">
+                                    <i class="fas fa-image mr-1"></i> View Images
+                                </button>
+                                <button class="text-sm text-orange-500 hover:text-orange-600">
+                                    <i class="fas fa-file-medical mr-1"></i> Lab Results
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ml-8 relative timeline-dot timeline-line">
+                        <div class="bg-orange-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">Dental Cleaning</p>
+                                    <p class="text-sm text-gray-600">Professional dental cleaning and examination</p>
+                                    <div class="mt-3 space-y-2">
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-user-md w-5 text-orange-500"></i>
+                                            <span>Dr. Michael Johnson (License: NY-VET-78901)</span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-hospital w-5 text-orange-500"></i>
+                                            <span>Pet Dental Specialists (Reg: NYC-VH-456)</span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-map-marker-alt w-5 text-orange-500"></i>
+                                            <span>456 Dental Drive, New York, NY 10002</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p class="text-sm font-semibold text-gray-700">Procedures Performed:</p>
+                                        <ul class="mt-1 text-sm text-gray-600 list-disc list-inside">
+                                            <li>Full mouth X-rays</li>
+                                            <li>Ultrasonic scaling and polishing</li>
+                                            <li>Fluoride treatment</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-500">Jan 10, 2025</span>
+                            </div>
+                            <div class="mt-3 flex items-center space-x-2">
+                                <button class="text-sm text-orange-500 hover:text-orange-600">
+                                    <i class="fas fa-file-pdf mr-1"></i> View Report
+                                </button>
+                                <button class="text-sm text-orange-500 hover:text-orange-600">
+                                    <i class="fas fa-image mr-1"></i> View X-Rays
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Record Modal -->
+    <div id="addRecordModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Add Health Record</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="healthRecordForm" class="space-y-6">
+                <div>
+                    <label class="block text-gray-700 mb-2" for="recordType">Record Type</label>
+                    <select id="recordType" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        <option value="checkup">Regular Checkup</option>
+                        <option value="vaccination">Vaccination</option>
+                        <option value="procedure">Medical Procedure</option>
+                        <option value="emergency">Emergency Visit</option>
+                        <option value="dental">Dental Care</option>
+                        <option value="grooming">Grooming</option>
+                    </select>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="date">Date</label>
+                        <input type="date" id="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="cost">Cost (DZ)</label>
+                        <input type="number" id="cost" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="vetName">Veterinarian Name</label>
+                        <input type="text" id="vetName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="vetLicense">License Number</label>
+                        <input type="text" id="vetLicense" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="facilityName">Facility Name</label>
+                        <input type="text" id="facilityName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="facilityReg">Facility Registration</label>
+                        <input type="text" id="facilityReg" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2" for="facilityAddress">Facility Address</label>
+                    <input type="text" id="facilityAddress" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2" for="procedures">Procedures Performed</label>
+                    <textarea id="procedures" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500" 
+                            placeholder="List all procedures, vaccinations, or treatments..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2" for="notes">Additional Notes</label>
+                    <textarea id="notes" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Attachments</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                        <input type="file" multiple class="hidden" id="fileInput">
+                        <label for="fileInput" class="cursor-pointer text-orange-500 hover:text-orange-600">
+                            <i class="fas fa-cloud-upload-alt text-2xl mb-2"></i>
+                            <p>Click to upload files or drag and drop</p>
+                            <p class="text-sm text-gray-500">Support for images, PDFs, and lab reports</p>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="closeModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">
+                        Save Record
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Pet Profile QR Code</h2>
+                <button onclick="closeQRModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center space-y-4">
+                <div id="qrcode"></div>
+                <p class="text-sm text-gray-600 text-center mt-4">
+                    Scan this QR code to quickly access your pet's health records.
+                    Share it with your veterinarian for instant access to the medical history.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Records Modal -->
+    <div id="sharingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Share Health Records</h2>
+                <button onclick="closeSharingModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-gray-700 mb-2" for="vetLicense">Veterinarian License</label>
+                    <input type="text" id="vetLicense" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                           placeholder="Enter veterinarian license number">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Select Records to Share</label>
+                    <div class="space-y-2 max-h-48 overflow-y-auto">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="form-checkbox text-orange-500">
+                            <span>Annual Checkup - Feb 15, 2025</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="form-checkbox text-orange-500">
+                            <span>Dental Cleaning - Jan 10, 2025</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Access Duration</label>
+                    <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        <option value="24h">24 Hours</option>
+                        <option value="7d">7 Days</option>
+                        <option value="30d">30 Days</option>
+                        <option value="permanent">Permanent Access</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button onclick="closeSharingModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button onclick="shareRecords()" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600">
+                        Share Records
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize AOS
+        AOS.init();
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('addRecordModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('addRecordModal').classList.add('hidden');
+        }
+
+        function showQRCode() {
+            document.getElementById('qrModal').classList.remove('hidden');
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+
+        function openSharingModal() {
+            document.getElementById('sharingModal').classList.remove('hidden');
+        }
+
+        function closeSharingModal() {
+            document.getElementById('sharingModal').classList.add('hidden');
+        }
+
+        async function shareRecords() {
+            const vetLicense = document.getElementById('vetLicense').value;
+            if (!vetLicense) {
+                alert('Please enter a veterinarian license number');
+                return;
+            }
+
+            try {
+                const sharingRecord = await RecordSharing.shareWithVet(['REC-123'], vetLicense);
+                alert(`Records shared successfully!\nAccess Token: ${sharingRecord.accessToken}`);
+                closeSharingModal();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // Add event listeners
+        document.querySelector('button:contains("Add Record")').addEventListener('click', openModal);
+
+        document.getElementById('healthRecordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Here you would typically save the record to the blockchain
+            closeModal();
+            alert('Health record saved successfully!');
+        });
+    </script>
+</body>
+</html>

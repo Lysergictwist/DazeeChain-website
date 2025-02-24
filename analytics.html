@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawPrintz™ Analytics - DazeeChain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #e5e5e5;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .dashboard-card {
+            background: #111111;
+            border: 1px solid #222222;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-black border-b border-gray-800 fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-5xl font-bold gradient-text hover-scale tracking-tight">DazeeChain</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="dashboard.html" class="text-orange-500 hover:text-orange-400">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- DNA Profile Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold mb-6 text-white">DNA Profile</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">Genetic Health Risks</h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-gray-300">Hip Dysplasia</span>
+                                    <span class="text-yellow-500">Medium Risk</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 60%"></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-gray-300">Heart Conditions</span>
+                                    <span class="text-green-500">Low Risk</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">Breed Composition</h3>
+                        <canvas id="breedChart" class="w-full"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insurance Analytics -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold mb-6 text-white">Smart Insurance</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">Premium Health Score</h3>
+                        <div class="text-center">
+                            <div class="text-5xl font-bold text-green-500 mb-2">92</div>
+                            <p class="text-gray-400">Based on health records</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">DZ Rewards</h3>
+                        <div class="text-center">
+                            <div class="text-5xl font-bold text-orange-500 mb-2">450</div>
+                            <p class="text-gray-400">Tokens earned from care</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">Next Checkup</h3>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-white mb-2">15 Days</div>
+                            <p class="text-gray-400">Until premium discount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Trends -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold mb-6 text-white">Health Analytics</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">Weight Tracking</h3>
+                        <canvas id="weightChart" class="w-full"></canvas>
+                    </div>
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">Activity Level</h3>
+                        <canvas id="activityChart" class="w-full"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lost Pet Prevention -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6 text-white">Lost Pet Prevention</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">GPS Location History</h3>
+                        <div class="bg-gray-900 rounded-lg p-4 h-64 flex items-center justify-center">
+                            <p class="text-gray-500">[Map Integration Coming Soon]</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-orange-500">Quick Response Setup</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
+                                <span class="text-gray-300">Emergency Contacts</span>
+                                <span class="text-green-500">Configured</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
+                                <span class="text-gray-300">Smart Poster QR</span>
+                                <span class="text-green-500">Generated</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
+                                <span class="text-gray-300">Community Alert Range</span>
+                                <span class="text-white">5 miles</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts
+        function initializeCharts() {
+            // Breed Composition Chart
+            new Chart(document.getElementById('breedChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['German Shepherd', 'Husky', 'Other'],
+                    datasets: [{
+                        data: [60, 30, 10],
+                        backgroundColor: ['#f97316', '#8b5cf6', '#6b7280']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e5e5e5'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Weight Tracking Chart
+            new Chart(document.getElementById('weightChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Weight (lbs)',
+                        data: [65, 67, 66, 68, 67, 66],
+                        borderColor: '#f97316',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e5e5e5'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: '#333'
+                            },
+                            ticks: {
+                                color: '#e5e5e5'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: '#333'
+                            },
+                            ticks: {
+                                color: '#e5e5e5'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Activity Chart
+            new Chart(document.getElementById('activityChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Activity (hours)',
+                        data: [2.5, 1.8, 2.2, 2.1, 2.4, 3.5, 3.2],
+                        backgroundColor: '#f97316'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e5e5e5'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: '#333'
+                            },
+                            ticks: {
+                                color: '#e5e5e5'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: '#333'
+                            },
+                            ticks: {
+                                color: '#e5e5e5'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts when the page loads
+        window.addEventListener('load', initializeCharts);
+    </script>
+</body>
+</html>
