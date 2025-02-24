@@ -198,6 +198,18 @@
                 transform: none;
             }
         }
+
+        /* Calculate the total height of fixed headers */
+        :root {
+            --banner-height: 36px;
+            --nav-height: 64px;
+            --total-header-height: calc(var(--banner-height) + var(--nav-height));
+        }
+
+        /* Add padding to body to account for fixed headers */
+        body {
+            padding-top: var(--total-header-height);
+        }
     </style>
 </head>
 <body class="bg-black text-white">
