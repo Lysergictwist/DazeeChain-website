@@ -156,9 +156,24 @@
             max-width: 600px;
             margin: 0 auto;
         }
+
+        @media (max-width: 640px) {
+            .mobile-banner {
+                font-size: 0.875rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            .mobile-nav {
+                padding: 0.5rem 1rem;
+            }
+            
+            .mobile-hero {
+                padding-top: 8rem;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="bg-black text-white">
     <!-- Navigation -->
     <nav class="nav-bg shadow-lg fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-4 relative">
