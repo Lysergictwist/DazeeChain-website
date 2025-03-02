@@ -1,0 +1,19 @@
+{
+  "name": "dazeechain-website",
+  "version": "1.0.0",
+  "description": "DazeeChain - Revolutionizing Pet Adoption",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel deploy --prod"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "aws-sdk": "^2.1450.0",
+    "mongodb": "^5.7.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^31.0.0"
+  }
+}
