@@ -325,6 +325,28 @@
                 left: 150%;
             }
         }
+
+        .dazee-image {
+            width: 12rem;
+            height: 12rem;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 4px solid #ff6b35;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .fallback-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body class="bg-black text-white">
@@ -395,7 +417,11 @@
             <div class="text-center">
                 <div class="mb-12 flex justify-center">
                     <div class="relative inline-block">
-                        <img src="images/dazee.jpg" alt="Dazee - Our Inspiration" class="rounded-full w-48 h-48 object-cover shadow-lg border-4 border-orange-500" title="Meet Dazee - The inspiration behind DazeeChain">
+                        <picture>
+                            <source srcset="images/dazee-new.jpg" type="image/jpeg">
+                            <source srcset="images/dazee.jpg" type="image/jpeg">
+                            <img src="images/fallback-dog.jpg" alt="Dazee - Our Inspiration" class="rounded-full w-48 h-48 object-cover shadow-lg border-4 border-orange-500" title="Meet Dazee - The inspiration behind DazeeChain">
+                        </picture>
                         <div class="absolute -top-4 -right-4 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
                             Our Inspiration
                         </div>
@@ -805,6 +831,19 @@
         userMenuToggle.addEventListener('click', function(event) {
             event.stopPropagation();
             toggleDropdown(userDropdownMenu);
+        });
+        
+        // Check if Dazee image loaded correctly
+        window.addEventListener('load', function() {
+            // Create a test image to check if the background image loads
+            const testImage = new Image();
+            testImage.src = 'images/dazee-new.jpg';
+            
+            testImage.onerror = function() {
+                console.log('Dazee image failed to load, showing fallback');
+                document.querySelector('.dazee-image').style.display = 'none';
+                document.querySelector('.fallback-image').classList.remove('hidden');
+            };
         });
     </script>
 </body>
