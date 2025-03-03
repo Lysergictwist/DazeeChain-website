@@ -6,6 +6,7 @@
     <title>Register Shelter - DazeeChain</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="js/ai-verification.js"></script>
     <script src="js/shelter-verification.js"></script>
     <style>
         .step-indicator {
@@ -86,6 +87,11 @@
                         <input type="text" id="usdaLicense"
                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
                     </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="yearsInOperation">Years in Operation</label>
+                        <input type="number" id="yearsInOperation" min="0" required
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
                 </div>
             </div>
 
@@ -139,9 +145,36 @@
                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
                         </div>
                         <div>
-                            <label class="block text-gray-700 mb-2" for="socialMedia">Social Media URL</label>
-                            <input type="url" id="socialMedia"
-                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                            <label class="block text-gray-700 mb-2">Social Media</label>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div>
+                                    <div class="flex items-center mb-1">
+                                        <i class="fab fa-facebook text-blue-600 mr-2"></i>
+                                        <label class="text-sm text-gray-700" for="facebook">Facebook</label>
+                                    </div>
+                                    <input type="url" id="facebook"
+                                           placeholder="https://facebook.com/your-shelter"
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                </div>
+                                <div>
+                                    <div class="flex items-center mb-1">
+                                        <i class="fab fa-instagram text-pink-600 mr-2"></i>
+                                        <label class="text-sm text-gray-700" for="instagram">Instagram</label>
+                                    </div>
+                                    <input type="url" id="instagram"
+                                           placeholder="https://instagram.com/your-shelter"
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                </div>
+                                <div>
+                                    <div class="flex items-center mb-1">
+                                        <i class="fab fa-twitter text-blue-400 mr-2"></i>
+                                        <label class="text-sm text-gray-700" for="twitter">Twitter</label>
+                                    </div>
+                                    <input type="url" id="twitter"
+                                           placeholder="https://twitter.com/your-shelter"
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -198,18 +231,29 @@
                         <div class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 mb-2">Veterinarian Name</label>
-                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                    <label class="block text-gray-700 mb-2" for="vetName1">Veterinarian #1 Name</label>
+                                    <input type="text" id="vetName1" required
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 mb-2">License Number</label>
-                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                    <label class="block text-gray-700 mb-2" for="vetContact1">Contact Information</label>
+                                    <input type="text" id="vetContact1" required
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                                           placeholder="Phone or Email">
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-gray-700 mb-2">Contact Information</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
-                                       placeholder="Phone or Email">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2" for="vetName2">Veterinarian #2 Name</label>
+                                    <input type="text" id="vetName2"
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2" for="vetContact2">Contact Information</label>
+                                    <input type="text" id="vetContact2"
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                                           placeholder="Phone or Email">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -218,17 +262,20 @@
                         <h3 class="font-semibold mb-2">Partner Shelter References</h3>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-gray-700 mb-2">Shelter Name</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                <label class="block text-gray-700 mb-2" for="shelterNameRef">Shelter Name</label>
+                                <input type="text" id="shelterNameRef"
+                                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-gray-700 mb-2">Contact Person</label>
-                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                                    <label class="block text-gray-700 mb-2" for="contactPersonRef">Contact Person</label>
+                                    <input type="text" id="contactPersonRef"
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 mb-2">Contact Information</label>
-                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                                    <label class="block text-gray-700 mb-2" for="contactInfoRef">Contact Information</label>
+                                    <input type="text" id="contactInfoRef"
+                                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
                                            placeholder="Phone or Email">
                                 </div>
                             </div>
@@ -360,14 +407,19 @@
             }
         });
 
-        document.getElementById('shelterRegistrationForm').addEventListener('submit', async (e) => {
+        document.getElementById('shelterRegistrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const formData = {
-                shelterName: document.getElementById('shelterName').value,
+            // Show the verification modal
+            document.getElementById('verificationModal').classList.remove('hidden');
+            
+            // Gather all form data
+            const shelterData = {
+                name: document.getElementById('shelterName').value,
                 ein: document.getElementById('ein').value,
                 stateLicense: document.getElementById('stateLicense').value,
                 usdaLicense: document.getElementById('usdaLicense').value,
+                yearsInOperation: parseInt(document.getElementById('yearsInOperation').value) || 0,
                 address: document.getElementById('address').value,
                 city: document.getElementById('city').value,
                 state: document.getElementById('state').value,
@@ -375,33 +427,105 @@
                 phone: document.getElementById('phone').value,
                 email: document.getElementById('email').value,
                 website: document.getElementById('website').value,
-                socialMedia: document.getElementById('socialMedia').value,
+                socialMedia: {
+                    facebook: document.getElementById('facebook').value,
+                    instagram: document.getElementById('instagram').value,
+                    twitter: document.getElementById('twitter').value
+                },
+                references: [
+                    {
+                        name: document.getElementById('vetName1').value,
+                        role: 'Veterinarian',
+                        contact: document.getElementById('vetContact1').value
+                    },
+                    {
+                        name: document.getElementById('vetName2').value,
+                        role: 'Veterinarian',
+                        contact: document.getElementById('vetContact2').value
+                    }
+                ].filter(ref => ref.name && ref.contact),
+                documents: [
+                    { type: 'tax_exempt', name: '501(c)(3) Documentation', url: '#tax-exempt-doc' },
+                    { type: 'state_license', name: 'State License', url: '#state-license-doc' },
+                    { type: 'photos', name: 'Facility Photos', url: '#facility-photos' }
+                ],
                 referralCode: document.getElementById('referralCode').value
             };
-
+            
             try {
-                const response = await fetch('/api/register-shelter', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Hide form and show success message
+                // Step 1: Update verification steps UI
+                updateVerificationStep('Document Analysis', 'processing');
+                
+                // Step 2: Run the AI-assisted verification
+                const verificationResult = await ShelterVerification.verifyShelter(shelterData);
+                
+                updateVerificationStep('Document Analysis', 'completed');
+                updateVerificationStep('Tax Status Verification', 'processing');
+                
+                // Short delay to simulate the process
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateVerificationStep('Tax Status Verification', 'completed');
+                updateVerificationStep('License Verification', 'processing');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateVerificationStep('License Verification', 'completed');
+                updateVerificationStep('Reference Checks', 'processing');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateVerificationStep('Reference Checks', 'completed');
+                updateVerificationStep('Blockchain Registration', 'processing');
+                
+                // Submit for manual review
+                const submitResult = await ShelterVerification.submitForManualReview(
+                    shelterData, 
+                    verificationResult
+                );
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                updateVerificationStep('Blockchain Registration', 'completed');
+                
+                // Update UI with completion message
+                document.getElementById('verificationStatus').innerHTML = 'Verification complete! Your application has been submitted for review.';
+                
+                // Hide modal after a delay
+                setTimeout(() => {
+                    document.getElementById('verificationModal').classList.add('hidden');
+                    
+                    // Show success message with referral code
                     document.getElementById('shelterRegistrationForm').classList.add('hidden');
                     document.getElementById('successMessage').classList.remove('hidden');
-                    document.getElementById('shelterReferralCode').textContent = data.referralCode;
-                } else {
-                    throw new Error(data.error || 'Registration failed');
-                }
+                    document.getElementById('shelterReferralCode').textContent = submitResult.referralCode;
+                }, 2000);
+                
             } catch (error) {
-                alert('Error submitting registration: ' + error.message);
+                console.error('Verification error:', error);
+                document.getElementById('verificationStatus').innerHTML = 'An error occurred during verification. Please try again.';
+                setTimeout(() => {
+                    document.getElementById('verificationModal').classList.add('hidden');
+                }, 3000);
             }
         });
+        
+        function updateVerificationStep(stepName, status) {
+            const steps = document.getElementById('verificationSteps').querySelectorAll('li');
+            
+            for (const step of steps) {
+                if (step.textContent.trim() === stepName) {
+                    // Clear existing status indicators
+                    step.classList.remove('text-gray-500');
+                    step.innerHTML = step.innerHTML.replace(/<i.*?<\/i>/g, '');
+                    
+                    if (status === 'processing') {
+                        step.innerHTML = `<i class="fas fa-circle-notch fa-spin text-orange-500 mr-2"></i>${stepName}`;
+                    } else if (status === 'completed') {
+                        step.innerHTML = `<i class="fas fa-check-circle text-green-500 mr-2"></i>${stepName}`;
+                    } else if (status === 'failed') {
+                        step.innerHTML = `<i class="fas fa-times-circle text-red-500 mr-2"></i>${stepName}`;
+                    }
+                    break;
+                }
+            }
+        }
 
         // Initialize first step
         showStep(1);

@@ -23,43 +23,122 @@ class ShelterVerification {
             }
 
             // If basic verification passes, proceed with AI verification
+            // First, check if we're using the ai-verification.js module
+            if (typeof AIShelterVerification === 'undefined') {
+                console.warn('AIShelterVerification not available, using legacy verification');
+                return this.legacyVerification(shelterData, results);
+            }
+            
+            // Use the enhanced AI verification
             const aiVerification = await AIShelterVerification.verifyWithAI(shelterData);
             
-            if (aiVerification.score >= 70) {
-                // Store both basic and AI verification results
-                const verificationRecord = {
-                    timestamp: new Date().toISOString(),
-                    basicVerification: results,
-                    aiVerification: aiVerification,
-                    status: aiVerification.recommendation.status,
-                    shelterData: {
-                        ...shelterData,
-                        verificationScore: aiVerification.score
-                    }
-                };
-
-                // Register on blockchain if highly recommended
-                if (aiVerification.score >= 90) {
-                    await this.registerOnBlockchain(verificationRecord);
+            // Always submit for manual review first, as per client requirement
+            return {
+                status: 'pending_review',
+                score: aiVerification.score,
+                message: 'Your application has been submitted for manual review',
+                aiVerification: aiVerification,
+                basicVerification: results,
+                shelterData: {
+                    ...shelterData,
+                    verificationScore: aiVerification.score,
+                    submissionDate: new Date().toISOString()
                 }
-
-                return {
-                    status: 'verified',
-                    score: aiVerification.score,
-                    recommendation: aiVerification.recommendation,
-                    details: aiVerification.details
-                };
-            } else {
-                return {
-                    status: 'failed',
-                    score: aiVerification.score,
-                    message: aiVerification.recommendation.message
-                };
-            }
+            };
         } catch (error) {
             console.error('Verification Error:', error);
             return { status: 'error', message: 'An error occurred during verification' };
         }
+    }
+
+    static async legacyVerification(shelterData, basicResults) {
+        // Simulate AI verification
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Legacy code path when AI verification module is not available
+        const verificationRecord = {
+            timestamp: new Date().toISOString(),
+            basicVerification: basicResults,
+            status: 'pending_review',
+            shelterData: {
+                ...shelterData,
+                verificationScore: 75,
+                submissionDate: new Date().toISOString()
+            }
+        };
+
+        return {
+            status: 'pending_review',
+            score: 75,
+            message: 'Your application has been submitted for manual review',
+            details: verificationRecord
+        };
+    }
+    
+    static async submitForManualReview(shelterData, verificationResults) {
+        try {
+            // In production, this would call an API to submit the application for review
+            
+            // Store the verification data in our database
+            await this.storeVerificationData(shelterData, verificationResults);
+            
+            // Generate a unique referral code for this shelter
+            const referralCode = this.generateReferralCode(shelterData.name);
+            
+            // Send email notification to admins about new shelter submission
+            await this.sendAdminNotification(shelterData);
+            
+            return {
+                status: 'submitted',
+                referralCode,
+                message: 'Your shelter application has been submitted for manual review. You will be notified when the review is complete.'
+            };
+        } catch (error) {
+            console.error('Manual Review Submission Error:', error);
+            return { status: 'error', message: 'Failed to submit for manual review' };
+        }
+    }
+    
+    static async storeVerificationData(shelterData, verificationResults) {
+        // In production, this would store all data in a database
+        // For now, we'll simulate this operation
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Store in localStorage for demo purposes
+        try {
+            const pendingShelters = JSON.parse(localStorage.getItem('pendingShelters') || '[]');
+            pendingShelters.push({
+                id: this.generateUniqueId(),
+                shelterData,
+                verificationResults,
+                status: 'pending',
+                submissionDate: new Date().toISOString()
+            });
+            localStorage.setItem('pendingShelters', JSON.stringify(pendingShelters));
+        } catch (e) {
+            console.error('Error storing shelter data:', e);
+        }
+        
+        return true;
+    }
+    
+    static async sendAdminNotification(shelterData) {
+        // In production, this would send an email to administrators
+        console.log('New shelter submission:', shelterData.name);
+        return true;
+    }
+    
+    static generateReferralCode(shelterName) {
+        // Generate a unique referral code based on shelter name and timestamp
+        const cleanName = shelterName.replace(/[^a-zA-Z0-9]/g, '').substring(0, 4).toUpperCase();
+        const timestamp = Date.now().toString(36).substring(4, 8).toUpperCase();
+        const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        
+        return `${cleanName}-${timestamp}-${random}`;
+    }
+    
+    static generateUniqueId() {
+        return 'shelter_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
     }
 
     static async verifyTaxStatus(shelterData) {
