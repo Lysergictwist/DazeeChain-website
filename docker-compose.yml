@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  dazeechain:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./blockchain_data.json:/app/blockchain_data.json
+    restart: always
