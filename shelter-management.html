@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter Management - DazeeChain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            background-image: radial-gradient(circle at 50% 50%, #111111 0%, #000000 100%);
+            min-height: 100vh;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b35, #ff8f35);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold;
+        }
+        
+        .card {
+            background: rgba(17, 17, 17, 0.8);
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b35;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .orange-button {
+            background: linear-gradient(45deg, #ff6b35, #ff8f35);
+            transition: all 0.3s ease;
+        }
+        
+        .orange-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+        
+        .green-button {
+            background: linear-gradient(45deg, #10b981, #059669);
+            transition: all 0.3s ease;
+        }
+        
+        .green-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50" style="top: 0;">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-3xl sm:text-4xl font-bold gradient-text">DazeeChain</a>
+                
+                <!-- Desktop Menu (hidden on mobile) -->
+                <div class="hidden sm:flex items-center space-x-8">
+                    <a href="whitepaper.html" class="text-gray-300 hover:text-white">Whitepaper</a>
+                    <a href="login.html" class="text-gray-300 hover:text-white">Login</a>
+                    <a href="shelter-portal.html" class="text-gray-300 hover:text-white">Shelter Portal</a>
+                    <div class="text-orange-500">
+                        <span class="font-medium">DZC:</span>
+                        <span class="ml-1">Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="sm:hidden text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Backdrop -->
+        <div id="menuBackdrop" class="backdrop fixed inset-0 z-40 sm:hidden"></div>
+
+        <!-- Mobile Menu Sidebar -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 sm:hidden">
+            <div class="flex justify-end p-4">
+                <button id="closeMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="px-4 py-2">
+                <div class="space-y-4">
+                    <a href="whitepaper.html" class="block w-full text-gray-300 hover:text-white py-2">
+                        <i class="fas fa-file-alt mr-2"></i>Whitepaper
+                    </a>
+                    <a href="login.html" class="block w-full text-gray-300 hover:text-white py-2">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                    <a href="shelter-portal.html" class="block w-full text-gray-300 hover:text-white py-2">
+                        <i class="fas fa-building mr-2"></i>Shelter Portal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20 px-4 py-12">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Shelter <span class="gradient-text">Management</span></h1>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">Join our network of animal shelters or refer a shelter to help revolutionize pet adoption with blockchain technology.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Register Card -->
+                <div class="card rounded-xl shadow-2xl p-8 flex flex-col h-full">
+                    <div class="flex-1">
+                        <div class="w-16 h-16 bg-opacity-20 bg-orange-500 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-building text-2xl text-orange-500"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white mb-4">Register Your Shelter</h2>
+                        <p class="text-gray-400 mb-6">
+                            Join our network of verified animal shelters and gain access to our blockchain-powered pet adoption platform. Streamline your operations, increase visibility, and help more pets find their forever homes.
+                        </p>
+                        <ul class="text-gray-400 space-y-2 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-2"></i>
+                                <span>Secure blockchain verification for your shelter</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-2"></i>
+                                <span>Streamlined pet adoption process</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-2"></i>
+                                <span>Access to DazeeChain's network of pet adopters</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-2"></i>
+                                <span>Earn DazeeCoins (DZC) for each successful adoption</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="register-shelter.html" class="orange-button w-full py-4 text-white font-bold rounded-lg text-center">
+                        Register Your Shelter
+                    </a>
+                </div>
+                
+                <!-- Refer Card -->
+                <div class="card rounded-xl shadow-2xl p-8 flex flex-col h-full">
+                    <div class="flex-1">
+                        <div class="w-16 h-16 bg-opacity-20 bg-green-500 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-handshake text-2xl text-green-500"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white mb-4">Refer a Shelter</h2>
+                        <p class="text-gray-400 mb-6">
+                            Know a shelter that would benefit from our platform? Refer them to DazeeChain and earn rewards when they join our network. Help us expand our community and save more animals.
+                        </p>
+                        <ul class="text-gray-400 space-y-2 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Earn referral bonuses in DazeeCoins (DZC)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Help expand the DazeeChain network</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Support animal shelters in your community</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Track your referrals and rewards</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="refer-shelter.html" class="green-button w-full py-4 text-white font-bold rounded-lg text-center">
+                        Refer a Shelter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0">
+                    <a href="index.html" class="text-3xl font-bold gradient-text">DazeeChain</a>
+                    <p class="text-gray-500 mt-2">Revolutionizing pet adoption with blockchain technology</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-discord text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between">
+                <div class="text-gray-500 text-sm mb-4 md:mb-0">
+                    &copy; 2025 DazeeChain. All rights reserved.
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-white text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-white text-sm">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const closeMenuButton = document.getElementById('closeMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuBackdrop = document.getElementById('menuBackdrop');
+            
+            function toggleMenu() {
+                mobileMenu.classList.toggle('transform');
+                mobileMenu.classList.toggle('translate-x-full');
+                menuBackdrop.classList.toggle('hidden');
+            }
+            
+            mobileMenuButton.addEventListener('click', toggleMenu);
+            closeMenuButton.addEventListener('click', toggleMenu);
+            menuBackdrop.addEventListener('click', toggleMenu);
+        });
+    </script>
+</body>
+</html>

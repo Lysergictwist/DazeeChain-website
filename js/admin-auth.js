@@ -1,112 +1,131 @@
 /**
- * Admin Authentication Module for DazeeChain
- * Handles admin login, session management, and access control
+ * Admin Authentication Module
+ * This module handles admin authentication, session management, and access control
  */
-class AdminAuth {
-    constructor() {
-        this.currentAdmin = null;
-        this.isAuthenticated = false;
-        
-        // Check if admin is already logged in
-        this.checkAuthStatus();
-    }
+const adminAuth = {
+    // Admin session data
+    session: null,
     
-    /**
-     * Check if admin is already authenticated
-     */
-    checkAuthStatus() {
-        const adminData = localStorage.getItem('dazeechain_admin');
-        
-        if (adminData) {
+    // Check if user is authenticated
+    get isAuthenticated() {
+        if (!this.session) {
+            this.loadSession();
+        }
+        return !!this.session;
+    },
+    
+    // Initialize admin auth
+    init() {
+        this.loadSession();
+        // Check if we need to authenticate via wallet
+        if (window.ethereum && !this.isAuthenticated) {
+            this.checkWalletAuth();
+        }
+    },
+    
+    // Load session from localStorage
+    loadSession() {
+        const sessionData = localStorage.getItem('adminSession');
+        if (sessionData) {
             try {
-                this.currentAdmin = JSON.parse(adminData);
-                this.isAuthenticated = true;
-                
-                // Auto-login for demo purposes
-                if (window.location.pathname.includes('/admin/') && !this.isAuthenticated) {
-                    window.location.href = '../admin-login.html';
+                this.session = JSON.parse(sessionData);
+                // Check if session is expired
+                if (this.session.expiresAt && new Date(this.session.expiresAt) < new Date()) {
+                    this.logout();
+                    return false;
                 }
-                
                 return true;
             } catch (e) {
-                console.error('Error parsing admin data:', e);
-                localStorage.removeItem('dazeechain_admin');
+                console.error('Error parsing admin session', e);
+                this.logout();
+                return false;
             }
         }
-        
         return false;
-    }
+    },
     
-    /**
-     * Login as admin
-     * @param {string} username - Admin username
-     * @param {string} password - Admin password
-     * @returns {boolean} - Login success status
-     */
-    login(username, password) {
-        // For demo purposes, hardcoded admin credentials
-        // In production, this would validate against a secure backend
-        if (username === 'admin' && password === 'dazeecoin2025') {
-            const adminData = {
-                id: 'admin-001',
-                username: username,
-                name: 'System Administrator',
-                role: 'super_admin',
-                permissions: ['approve_shelters', 'manage_users', 'view_analytics'],
-                lastLogin: new Date().toISOString()
-            };
-            
-            // Store admin data in localStorage
-            localStorage.setItem('dazeechain_admin', JSON.stringify(adminData));
-            
-            this.currentAdmin = adminData;
-            this.isAuthenticated = true;
-            
-            return true;
+    // Save session to localStorage
+    saveSession() {
+        if (this.session) {
+            localStorage.setItem('adminSession', JSON.stringify(this.session));
         }
-        
-        return false;
-    }
+    },
     
-    /**
-     * Logout current admin
-     */
-    logout() {
-        localStorage.removeItem('dazeechain_admin');
-        this.currentAdmin = null;
-        this.isAuthenticated = false;
+    // Check if the connected wallet is an admin wallet
+    async checkWalletAuth() {
+        if (!window.ethereum) return false;
         
-        // Redirect to login page
-        window.location.href = '../admin-login.html';
-    }
-    
-    /**
-     * Check if current admin has specific permission
-     * @param {string} permission - Permission to check
-     * @returns {boolean} - Has permission
-     */
-    hasPermission(permission) {
-        if (!this.isAuthenticated || !this.currentAdmin) {
+        try {
+            // Request account access
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            if (accounts.length === 0) return false;
+            
+            const walletAddress = accounts[0];
+            
+            // Check if this wallet is an admin wallet
+            // In production, this would check against a database or smart contract
+            const adminWallets = [
+                '0xYourAdminWalletAddress', // Replace with your actual wallet address
+                '0x123456789abcdef123456789abcdef123456789' // Example wallet for demo
+            ];
+            
+            if (adminWallets.includes(walletAddress.toLowerCase())) {
+                // Create admin session
+                this.session = {
+                    id: this.generateSessionId(),
+                    walletAddress: walletAddress,
+                    username: 'Admin', // Default name for wallet-based auth
+                    role: 'admin',
+                    permissions: ['approve_shelters', 'reject_shelters', 'request_more_info'],
+                    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+                };
+                this.saveSession();
+                return true;
+            }
+            
+            return false;
+        } catch (error) {
+            console.error('Error checking wallet authentication', error);
             return false;
         }
-        
-        return this.currentAdmin.permissions.includes(permission);
-    }
+    },
     
-    /**
-     * Get current admin data
-     * @returns {object|null} - Admin data or null if not authenticated
-     */
-    getAdminData() {
-        return this.currentAdmin;
+    // Login with username and password
+    login(username, password) {
+        // For demo purposes only - in production, this would validate against a secure backend
+        if (username === 'admin' && password === 'dazeecoin2025') {
+            this.session = {
+                id: this.generateSessionId(),
+                username: 'Admin',
+                role: 'admin',
+                permissions: ['approve_shelters', 'reject_shelters', 'request_more_info'],
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+            };
+            this.saveSession();
+            return true;
+        }
+        return false;
+    },
+    
+    // Logout
+    logout() {
+        this.session = null;
+        localStorage.removeItem('adminSession');
+    },
+    
+    // Check if user has a specific permission
+    hasPermission(permission) {
+        if (!this.isAuthenticated) return false;
+        return this.session.permissions.includes(permission);
+    },
+    
+    // Generate a random session ID
+    generateSessionId() {
+        return 'admin-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
-}
+};
 
-// Create global instance
-const adminAuth = new AdminAuth();
-
-// Auto-login for demo purposes (REMOVE IN PRODUCTION)
-if (window.location.pathname.includes('/admin/') && !adminAuth.isAuthenticated) {
-    // Force login with default credentials for demo
-    adminAuth.login('admin', 'dazeecoin2025');
-}
+// Initialize admin auth when the script loads
+document.addEventListener('DOMContentLoaded', () => {
+    adminAuth.init();
+});
