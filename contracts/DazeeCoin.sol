@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
+import "./ShelterSupportPool.sol";
 
 contract DazeeCoin is ERC20, ERC20Burnable, Pausable, AccessControl, ERC20Permit {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -16,13 +17,18 @@ contract DazeeCoin is ERC20, ERC20Burnable, Pausable, AccessControl, ERC20Permit
     mapping(address => uint256) public stakedBalance;
     mapping(address => uint256) public stakingStart;
 
-    // Shelter verification
+    // Shelter verification and support
+    ShelterSupportPool public shelterSupportPool;
     mapping(address => bool) public verifiedShelters;
     mapping(address => uint256) public shelterRating; // 0-100 score
+    mapping(address => uint256) public lastAdoptionTimestamp;
+    uint256 public constant ADOPTION_COOLDOWN = 1 days;
 
     event ShelterVerified(address shelter, uint256 rating);
     event TokensStaked(address indexed user, uint256 amount);
     event TokensUnstaked(address indexed user, uint256 amount, uint256 reward);
+    event AdoptionRecorded(address shelter, uint256 timestamp);
+    event ShelterSupportPoolSet(address poolAddress);
 
     constructor() 
         ERC20("DazeeCoin", "DZ") 
@@ -34,6 +40,12 @@ contract DazeeCoin is ERC20, ERC20Burnable, Pausable, AccessControl, ERC20Permit
         
         // Mint initial supply
         _mint(msg.sender, 100000000 * 10 ** decimals()); // 100 million initial supply
+    }
+
+    function setShelterSupportPool(address poolAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(poolAddress != address(0), "Invalid pool address");
+        shelterSupportPool = ShelterSupportPool(poolAddress);
+        emit ShelterSupportPoolSet(poolAddress);
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {
@@ -53,18 +65,66 @@ contract DazeeCoin is ERC20, ERC20Burnable, Pausable, AccessControl, ERC20Permit
         whenNotPaused
         override
     {
+        // Collect transaction fee for shelter support pool
+        if (from != address(0) && // not minting
+            to != address(0) &&   // not burning
+            address(shelterSupportPool) != address(0) && // pool is set
+            from != address(shelterSupportPool) && // not from pool
+            to != address(shelterSupportPool))     // not to pool
+        {
+            shelterSupportPool.collectTransactionFee(amount);
+        }
         super._beforeTokenTransfer(from, to, amount);
     }
 
-    // Shelter verification functions
+    // Shelter verification and management functions
     function verifyShelter(address shelter, uint256 rating) 
         external 
         onlyRole(DEFAULT_ADMIN_ROLE) 
     {
         require(rating <= 100, "Rating must be between 0-100");
+        require(address(shelterSupportPool) != address(0), "Support pool not set");
+        
         verifiedShelters[shelter] = true;
         shelterRating[shelter] = rating;
+        
+        // Activate shelter in support pool
+        shelterSupportPool.activateShelter(shelter);
+        
         emit ShelterVerified(shelter, rating);
+    }
+
+    function recordAdoption(address shelter) 
+        external 
+        onlyRole(DEFAULT_ADMIN_ROLE) 
+    {
+        require(verifiedShelters[shelter], "Shelter not verified");
+        require(block.timestamp >= lastAdoptionTimestamp[shelter] + ADOPTION_COOLDOWN, 
+                "Adoption cooldown period not met");
+        
+        lastAdoptionTimestamp[shelter] = block.timestamp;
+        shelterSupportPool.recordAdoption(shelter);
+        
+        emit AdoptionRecorded(shelter, block.timestamp);
+    }
+
+    function updateShelterEngagement(address shelter, uint256 score) 
+        external 
+        onlyRole(DEFAULT_ADMIN_ROLE) 
+    {
+        require(verifiedShelters[shelter], "Shelter not verified");
+        require(score <= 100, "Score must be between 0-100");
+        
+        shelterSupportPool.updateEngagementScore(shelter, score);
+    }
+
+    function deactivateShelter(address shelter) 
+        external 
+        onlyRole(DEFAULT_ADMIN_ROLE) 
+    {
+        require(verifiedShelters[shelter], "Shelter not verified");
+        verifiedShelters[shelter] = false;
+        shelterSupportPool.deactivateShelter(shelter);
     }
 
     function isShelterVerified(address shelter) external view returns (bool) {

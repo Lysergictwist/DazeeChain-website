@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DazeeChain - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-purple-700 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-2xl font-bold">DazeeChain Admin</h1>
+            <div class="flex items-center space-x-4">
+                <span id="adminAddress" class="text-white"></span>
+                <button id="logoutBtn" class="bg-purple-800 text-white px-4 py-2 rounded">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-lg font-semibold mb-2">Pending Verifications</h3>
+                <p id="pendingVerifications" class="text-3xl font-bold text-purple-600">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-lg font-semibold mb-2">Total Shelters</h3>
+                <p id="totalShelters" class="text-3xl font-bold text-purple-600">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h3 class="text-lg font-semibold mb-2">Total Adoptions</h3>
+                <p id="totalAdoptions" class="text-3xl font-bold text-purple-600">0</p>
+            </div>
+        </div>
+
+        <!-- Pending Verifications -->
+        <div class="bg-white rounded-lg shadow mb-8">
+            <div class="p-6 border-b">
+                <h2 class="text-2xl font-bold">Pending Shelter Verifications</h2>
+            </div>
+            <div class="p-6">
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th class="text-left pb-4">Shelter Name</th>
+                            <th class="text-left pb-4">EIN</th>
+                            <th class="text-left pb-4">Address</th>
+                            <th class="text-left pb-4">Status</th>
+                            <th class="text-left pb-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingVerificationsList">
+                        <!-- Pending verifications will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- System Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Contract Controls -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b">
+                    <h2 class="text-2xl font-bold">Contract Controls</h2>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <h3 class="font-semibold mb-2">Reward Pool Management</h3>
+                        <div class="flex space-x-2">
+                            <input type="number" id="rewardAmount" placeholder="Amount in DZ" 
+                                class="flex-1 p-2 border rounded">
+                            <button onclick="updateRewardPool()" 
+                                class="bg-purple-600 text-white px-4 py-2 rounded">
+                                Update Pool
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Emergency Controls</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="pauseContracts()" 
+                                class="bg-red-600 text-white px-4 py-2 rounded">
+                                Pause Contracts
+                            </button>
+                            <button onclick="unpauseContracts()" 
+                                class="bg-green-600 text-white px-4 py-2 rounded">
+                                Unpause Contracts
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Parameters -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b">
+                    <h2 class="text-2xl font-bold">System Parameters</h2>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <h3 class="font-semibold mb-2">Reward Settings</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label>Adoption Reward:</label>
+                                <input type="number" id="adoptionReward" class="p-2 border rounded w-32">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label>Referral Reward %:</label>
+                                <input type="number" id="referralReward" class="p-2 border rounded w-32">
+                            </div>
+                            <button onclick="updateRewardSettings()" 
+                                class="bg-purple-600 text-white px-4 py-2 rounded w-full">
+                                Update Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let governance;
+        let dazeeRewards;
+        let isAdmin = false;
+
+        async function initializeAdminDashboard() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask to use this dashboard');
+                return;
+            }
+
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                const address = await signer.getAddress();
+
+                // Initialize contracts
+                governance = new ethers.Contract(
+                    'GOVERNANCE_ADDRESS',
+                    [
+                        'function hasRole(bytes32, address) view returns (bool)',
+                        'function ADMIN_ROLE() view returns (bytes32)',
+                        'function getPendingVerifications() view returns (tuple(address, string, string, bool)[])',
+                        'function approveShelterVerification(address)',
+                        'function rejectShelterVerification(address)'
+                    ],
+                    signer
+                );
+
+                // Check if user is admin
+                const ADMIN_ROLE = await governance.ADMIN_ROLE();
+                isAdmin = await governance.hasRole(ADMIN_ROLE, address);
+
+                if (!isAdmin) {
+                    alert('Access denied. Admin rights required.');
+                    window.location.href = '/';
+                    return;
+                }
+
+                // Display admin address
+                document.getElementById('adminAddress').textContent = 
+                    `Admin: ${address.slice(0, 6)}...${address.slice(-4)}`;
+
+                // Load dashboard data
+                await loadDashboardData();
+                
+                // Set up event listeners
+                setupEventListeners();
+
+            } catch (error) {
+                console.error('Error initializing admin dashboard:', error);
+                alert('Error connecting to wallet. Please try again.');
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Load pending verifications
+                const pendingVerifications = await governance.getPendingVerifications();
+                updatePendingVerificationsList(pendingVerifications);
+
+                // Update stats
+                document.getElementById('pendingVerifications').textContent = 
+                    pendingVerifications.length;
+
+                // Load other stats...
+                // These would be implemented based on your specific contract functions
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        function updatePendingVerificationsList(verifications) {
+            const list = document.getElementById('pendingVerificationsList');
+            list.innerHTML = verifications.map(v => `
+                <tr class="border-t">
+                    <td class="py-4">${v.name}</td>
+                    <td class="py-4">${v.ein}</td>
+                    <td class="py-4">${v.address}</td>
+                    <td class="py-4">
+                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                            Pending
+                        </span>
+                    </td>
+                    <td class="py-4">
+                        <button onclick="approveShelter('${v.address}')"
+                            class="bg-green-500 text-white px-3 py-1 rounded mr-2">
+                            Approve
+                        </button>
+                        <button onclick="rejectShelter('${v.address}')"
+                            class="bg-red-500 text-white px-3 py-1 rounded">
+                            Reject
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function approveShelter(address) {
+            try {
+                await governance.approveShelterVerification(address);
+                await loadDashboardData();
+            } catch (error) {
+                console.error('Error approving shelter:', error);
+                alert('Error approving shelter. Please try again.');
+            }
+        }
+
+        async function rejectShelter(address) {
+            try {
+                await governance.rejectShelterVerification(address);
+                await loadDashboardData();
+            } catch (error) {
+                console.error('Error rejecting shelter:', error);
+                alert('Error rejecting shelter. Please try again.');
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                // Implement logout logic
+                window.location.href = '/';
+            });
+        }
+
+        // Initialize dashboard when page loads
+        window.addEventListener('load', initializeAdminDashboard);
+    </script>
+</body>
+</html>

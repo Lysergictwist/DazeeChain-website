@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DazeeChain - User Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+    <script src="js/user-profile.js"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-indigo-600 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-2xl font-bold">DazeeChain</h1>
+            <div class="flex items-center space-x-4">
+                <span id="userAddress" class="text-white"></span>
+                <span id="userBalance" class="text-white bg-indigo-700 px-4 py-2 rounded"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rewards Summary Card -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Your Rewards</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span>Total Earned:</span>
+                        <span id="totalRewards" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Pending:</span>
+                        <span id="pendingRewards" class="font-bold text-green-600"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Stats Card -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Referral Program</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span>Total Referrals:</span>
+                        <span id="totalReferrals" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Remaining:</span>
+                        <span id="remainingReferrals" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Rewards Earned:</span>
+                        <span id="referralRewards" class="font-bold text-green-600"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adoption Stats Card -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Your Adoptions</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span>Total Adoptions:</span>
+                        <span id="totalAdoptions" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Rewards Earned:</span>
+                        <span id="adoptionRewards" class="font-bold text-green-600"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Feed -->
+        <div class="mt-8">
+            <h2 class="text-2xl font-bold mb-6">Recent Activity</h2>
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <table class="min-w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reward</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityFeed" class="bg-white divide-y divide-gray-200">
+                        <!-- Activity items will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let userProfile;
+        
+        async function initializeDashboard() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask to use this dashboard');
+                return;
+            }
+
+            try {
+                // Connect to wallet
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                const address = await signer.getAddress();
+
+                // Initialize user profile
+                userProfile = new UserProfile(
+                    provider,
+                    'DAZEE_REWARDS_ADDRESS',
+                    'ADOPTION_REWARDS_ADDRESS'
+                );
+
+                // Load and display user data
+                const profile = await userProfile.getUserProfile(address);
+                const formattedData = userProfile.formatProfileData(profile);
+                updateDashboard(formattedData);
+
+                // Update user address and balance
+                document.getElementById('userAddress').textContent = 
+                    address.slice(0, 6) + '...' + address.slice(-4);
+                const balance = await provider.getBalance(address);
+                document.getElementById('userBalance').textContent = 
+                    parseFloat(ethers.utils.formatEther(balance)).toFixed(4) + ' ETH';
+
+            } catch (error) {
+                console.error('Error initializing dashboard:', error);
+                alert('Error connecting to wallet. Please try again.');
+            }
+        }
+
+        function updateDashboard(data) {
+            // Update rewards
+            document.getElementById('totalRewards').textContent = data.statistics.rewards.total + ' DZ';
+            document.getElementById('pendingRewards').textContent = data.statistics.rewards.pending + ' DZ';
+
+            // Update referrals
+            document.getElementById('totalReferrals').textContent = data.statistics.referrals.total;
+            document.getElementById('remainingReferrals').textContent = data.statistics.referrals.remaining;
+            document.getElementById('referralRewards').textContent = 
+                data.statistics.referrals.rewardsEarned + ' DZ';
+
+            // Update adoptions
+            document.getElementById('totalAdoptions').textContent = data.statistics.adoptions.total;
+            document.getElementById('adoptionRewards').textContent = 
+                data.statistics.adoptions.rewardsEarned + ' DZ';
+
+            // Update activity feed
+            const activityFeed = document.getElementById('activityFeed');
+            activityFeed.innerHTML = data.activityFeed.map(activity => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            ${activity.type === 'referral' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">
+                            ${activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        ${activity.type === 'referral' ? 
+                            `Referred shelter: ${activity.shelter.slice(0, 6)}...${activity.shelter.slice(-4)}` :
+                            `Adopted from: ${activity.shelter.slice(0, 6)}...${activity.shelter.slice(-4)}`}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-green-600">
+                        ${activity.type === 'referral' ? activity.reward + ' DZ' : '100 DZ'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                        ${activity.date}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize dashboard when page loads
+        window.addEventListener('load', initializeDashboard);
+    </script>
+</body>
+</html>

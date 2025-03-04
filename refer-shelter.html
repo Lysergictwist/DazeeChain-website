@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refer a Shelter - DazeeChain</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script src="js/dazee-rewards.js"></script>
+    <script src="js/referral-system.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-50">
@@ -19,7 +22,55 @@
     <div class="max-w-2xl mx-auto mt-12 px-4">
         <div class="bg-white rounded-lg shadow-lg p-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-6">Refer a Shelter</h1>
-            <p class="text-gray-600 mb-8">Know a local animal shelter that could benefit from DazeeChain? Let us know about them, and we'll reach out with information about our project.</p>
+            <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Referral Program</h2>
+                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Earn DZ tokens for each verified shelter you refer!</li>
+                    <li>Shelter must complete registration and pass verification</li>
+                    <li>Maximum of 5 successful referrals per wallet</li>
+                    <li>Each shelter can only be referred once</li>
+                </ul>
+            </div>
+
+            <!-- Wallet Connection Section -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Connect Your Wallet</h2>
+                <p class="text-gray-600 mb-4">Connect your wallet to generate your unique referral code and track your rewards.</p>
+                <div class="flex items-center justify-between">
+                    <span id="walletStatus" class="text-gray-600">Wallet not connected</span>
+                    <button type="button" id="connectWalletBtn" 
+                            class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                        Connect Wallet
+                    </button>
+                </div>
+            </div>
+
+            <!-- Referral Code Section (Hidden until wallet connected) -->
+            <div id="referralCodeSection" class="hidden bg-green-50 border border-green-200 rounded-lg p-4 mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Your Referral Code</h2>
+                <div class="flex items-center space-x-4 mb-4">
+                    <code id="referralCode" class="bg-white px-4 py-2 rounded border flex-grow font-mono text-lg"></code>
+                    <button id="copyCodeBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                        Copy
+                    </button>
+                </div>
+                <p class="text-sm text-gray-600">Share this code with shelters to track your referrals</p>
+            </div>
+
+            <!-- Referral Stats Section -->
+            <div id="referralStats" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Your Referral Stats</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">Pending Referrals</p>
+                        <p id="pendingReferrals" class="text-2xl font-bold text-gray-800">0</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Successful Referrals</p>
+                        <p id="successfulReferrals" class="text-2xl font-bold text-gray-800">0</p>
+                    </div>
+                </div>
+            </div>
 
             <form id="shelterReferralForm" class="space-y-6">
                 <!-- Your Information -->
@@ -108,14 +159,100 @@
     </div>
 
     <script>
+        let dazeeRewards;
+        let userWallet;
+        let referralSystem;
+
+        // Initialize systems
+        async function initializeSystems() {
+            if (typeof window.ethereum !== 'undefined') {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const contractAddress = 'YOUR_DEPLOYED_CONTRACT_ADDRESS';
+                dazeeRewards = new DazeeRewards();
+                await dazeeRewards.initialize(provider, contractAddress);
+                referralSystem = new ReferralSystem();
+            }
+        }
+
+        // Connect wallet function
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum !== 'undefined') {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userWallet = accounts[0];
+                    document.getElementById('walletStatus').textContent = `Connected: ${userWallet.substring(0, 6)}...${userWallet.substring(38)}`;
+                    document.getElementById('connectWalletBtn').textContent = 'Connected';
+                    document.getElementById('connectWalletBtn').disabled = true;
+
+                    // Check referral limit
+                    const canRefer = await referralSystem.checkReferralLimit(userWallet);
+                    if (!canRefer) {
+                        alert('You have reached the maximum number of successful referrals.');
+                        return;
+                    }
+
+                    // Generate and display referral code
+                    const referralCode = await referralSystem.generateReferralCode(userWallet);
+                    document.getElementById('referralCode').textContent = referralCode;
+                    document.getElementById('referralCodeSection').classList.remove('hidden');
+                    document.getElementById('referralStats').classList.remove('hidden');
+
+                    // Store referral data
+                    await referralSystem.storeReferral(referralCode, {
+                        walletAddress: userWallet,
+                        timestamp: Date.now()
+                    });
+
+                    // Update stats
+                    updateReferralStats();
+                } else {
+                    alert('Please install MetaMask to connect your wallet!');
+                }
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                alert('Error connecting wallet. Please try again.');
+            }
+        }
+
+        // Copy referral code to clipboard
+        document.getElementById('copyCodeBtn').addEventListener('click', () => {
+            const code = document.getElementById('referralCode').textContent;
+            navigator.clipboard.writeText(code)
+                .then(() => alert('Referral code copied to clipboard!'))
+                .catch(err => console.error('Failed to copy code:', err));
+        });
+
+        // Update referral statistics
+        async function updateReferralStats() {
+            if (!userWallet) return;
+
+            const referrals = JSON.parse(localStorage.getItem('referrals') || '{}');
+            const userReferrals = Object.values(referrals).filter(ref => ref.walletAddress === userWallet);
+            
+            const pending = userReferrals.filter(ref => !ref.used).length;
+            const successful = userReferrals.filter(ref => ref.verifiedShelter).length;
+
+            document.getElementById('pendingReferrals').textContent = pending;
+            document.getElementById('successfulReferrals').textContent = successful;
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initializeSystems);
+        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+
         document.getElementById('shelterReferralForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // In production, this would send the form data to your backend
+            if (!userWallet) {
+                alert('Please connect your wallet to submit a referral!');
+                return;
+            }
+            
             const formData = {
                 referrer: {
                     name: document.getElementById('yourName').value,
-                    email: document.getElementById('yourEmail').value
+                    email: document.getElementById('yourEmail').value,
+                    walletAddress: userWallet
                 },
                 shelter: {
                     name: document.getElementById('shelterName').value,
@@ -127,11 +264,26 @@
                 }
             };
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            try {
+                // Submit referral to backend
+                const response = await fetch('/api/referrals', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
 
-            // Show success modal
-            document.getElementById('successModal').classList.remove('hidden');
+                if (response.ok) {
+                    // Show success modal
+                    document.getElementById('successModal').classList.remove('hidden');
+                } else {
+                    throw new Error('Failed to submit referral');
+                }
+            } catch (error) {
+                console.error('Error submitting referral:', error);
+                alert('Error submitting referral. Please try again.');
+            }
         });
     </script>
 </body>

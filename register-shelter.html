@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Shelter - DazeeChain</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script src="js/dazee-rewards.js"></script>
+    <script src="js/referral-system.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="js/ai-verification.js"></script>
-    <script src="js/shelter-verification.js"></script>
     <style>
         .step-indicator {
             width: 40px;
@@ -59,17 +60,27 @@
             <!-- Step 1: Basic Information -->
             <div id="step1" class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-xl font-semibold mb-4">Basic Information</h2>
+                
+                <!-- Referral Code Section -->
+                <div class="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-2">Have a Referral Code?</h3>
+                    <p class="text-gray-600 mb-4">If someone referred you to DazeeChain, enter their referral code here.</p>
+                    <div class="flex items-center space-x-4">
+                        <input type="text" id="referralCode" placeholder="Enter referral code (e.g., DZ-XXXXXXXX)"
+                               class="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                               pattern="^DZ-[A-Z0-9]{8}$">
+                        <button type="button" id="verifyReferralBtn"
+                                class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                            Verify Code
+                        </button>
+                    </div>
+                    <p id="referralStatus" class="mt-2 text-sm"></p>
+                </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-gray-700 mb-2" for="shelterName">Shelter Name</label>
                         <input type="text" id="shelterName" required
                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 mb-2" for="referralCode">Referral Code (Optional)</label>
-                        <input type="text" id="referralCode"
-                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
-                               placeholder="Enter referral code if you have one">
                     </div>
                     <div>
                         <label class="block text-gray-700 mb-2" for="ein">EIN (Tax ID)</label>
@@ -302,6 +313,18 @@
             <!-- Step 4: Review & Submit -->
             <div id="step4" class="bg-white rounded-lg shadow-lg p-6 hidden">
                 <h2 class="text-xl font-semibold mb-4">Review & Submit</h2>
+                <!-- Wallet Connection Section -->
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-2">Connect Wallet to Receive Rewards</h3>
+                    <p class="text-gray-600 mb-4">Connect your wallet to receive DazeeChain (DZ) rewards for successful registrations and adoptions.</p>
+                    <div class="flex items-center justify-between">
+                        <span id="walletStatus" class="text-gray-600">Wallet not connected</span>
+                        <button type="button" id="connectWalletBtn" 
+                                class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                            Connect Wallet
+                        </button>
+                    </div>
+                </div>
                 <div id="registrationSummary" class="space-y-4">
                     <!-- Will be populated dynamically -->
                 </div>
@@ -370,6 +393,162 @@
     <script>
         let currentStep = 1;
         const totalSteps = 4;
+        let dazeeRewards;
+        let userWallet;
+        let referralSystem;
+        let verifiedReferralCode = null;
+
+        // Initialize systems
+        async function initializeSystems() {
+            if (typeof window.ethereum !== 'undefined') {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const contractAddress = 'YOUR_DEPLOYED_CONTRACT_ADDRESS';
+                dazeeRewards = new DazeeRewards();
+                await dazeeRewards.initialize(provider, contractAddress);
+                referralSystem = new ReferralSystem();
+            }
+        }
+
+        // Verify referral code
+        async function verifyReferralCode() {
+            const codeInput = document.getElementById('referralCode');
+            const statusElement = document.getElementById('referralStatus');
+            const code = codeInput.value.trim();
+
+            if (!referralSystem.validateReferralCode(code)) {
+                statusElement.textContent = 'Invalid referral code format';
+                statusElement.className = 'mt-2 text-sm text-red-600';
+                return;
+            }
+
+            const referralData = await referralSystem.getReferralData(code);
+            if (!referralData) {
+                statusElement.textContent = 'Referral code not found';
+                statusElement.className = 'mt-2 text-sm text-red-600';
+                return;
+            }
+
+            if (referralData.used) {
+                statusElement.textContent = 'This referral code has already been used';
+                statusElement.className = 'mt-2 text-sm text-red-600';
+                return;
+            }
+
+            verifiedReferralCode = code;
+            statusElement.textContent = 'Referral code verified successfully!';
+            statusElement.className = 'mt-2 text-sm text-green-600';
+            document.getElementById('verifyReferralBtn').disabled = true;
+            codeInput.disabled = true;
+        }
+
+        // Connect wallet function
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum !== 'undefined') {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userWallet = accounts[0];
+                    document.getElementById('walletStatus').textContent = `Connected: ${userWallet.substring(0, 6)}...${userWallet.substring(38)}`;
+                    document.getElementById('connectWalletBtn').textContent = 'Connected';
+                    document.getElementById('connectWalletBtn').disabled = true;
+                } else {
+                    alert('Please install MetaMask to connect your wallet!');
+                }
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                alert('Error connecting wallet. Please try again.');
+            }
+        }
+
+        document.getElementById('verifyReferralBtn').addEventListener('click', verifyReferralCode);
+        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+        window.addEventListener('load', initializeSystems);
+
+        document.getElementById('shelterRegistrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!userWallet) {
+                alert('Please connect your wallet to complete registration!');
+                return;
+            }
+
+            // Show the verification modal
+            document.getElementById('verificationModal').classList.remove('hidden');
+            
+            try {
+                // Verify shelter information
+                const shelterData = {
+                    name: document.getElementById('shelterName').value,
+                    ein: document.getElementById('ein').value,
+                    address: document.getElementById('address').value,
+                    // ... other fields ...
+                };
+
+                // Process verification
+                const verificationResult = await verifyShelter(shelterData);
+                
+                if (verificationResult.success) {
+                    // If wallet is connected and contract is initialized
+                    if (userWallet && dazeeRewards) {
+                        try {
+                            updateVerificationStep('Blockchain Registration', 'Processing');
+
+                            // Process referral if code exists
+                            if (verifiedReferralCode) {
+                                const referralData = await referralSystem.getReferralData(verifiedReferralCode);
+                                if (referralData && !referralData.used) {
+                                    await dazeeRewards.processReferral(referralData.walletAddress, userWallet);
+                                    await referralSystem.markReferralUsed(verifiedReferralCode, {
+                                        shelterAddress: userWallet,
+                                        verificationTime: Date.now()
+                                    });
+                                }
+                            }
+                            
+                            // Approve shelter with initial allocation
+                            await dazeeRewards.approveShelter(userWallet, 0);
+                            updateVerificationStep('Blockchain Registration', 'Complete');
+                            
+                        } catch (error) {
+                            console.error('Blockchain registration error:', error);
+                            updateVerificationStep('Blockchain Registration', 'Failed');
+                            throw error;
+                        }
+                    }
+                    
+                    // Complete verification process
+                    document.getElementById('verificationStatus').innerHTML = 'Verification complete! Redirecting to dashboard...';
+                    setTimeout(() => {
+                        window.location.href = 'shelter-portal.html';
+                    }, 2000);
+                } else {
+                    document.getElementById('verificationStatus').innerHTML = 'Verification failed. Please check your information and try again.';
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                document.getElementById('verificationStatus').innerHTML = 'An error occurred during verification. Please try again.';
+            }
+        });
+        
+        function updateVerificationStep(stepName, status) {
+            const steps = document.getElementById('verificationSteps').querySelectorAll('li');
+            
+            for (const step of steps) {
+                if (step.textContent.trim() === stepName) {
+                    // Clear existing status indicators
+                    step.classList.remove('text-gray-500');
+                    step.innerHTML = step.innerHTML.replace(/<i.*?<\/i>/g, '');
+                    
+                    if (status === 'processing') {
+                        step.innerHTML = `<i class="fas fa-circle-notch fa-spin text-orange-500 mr-2"></i>${stepName}`;
+                    } else if (status === 'completed') {
+                        step.innerHTML = `<i class="fas fa-check-circle text-green-500 mr-2"></i>${stepName}`;
+                    } else if (status === 'failed') {
+                        step.innerHTML = `<i class="fas fa-times-circle text-red-500 mr-2"></i>${stepName}`;
+                    }
+                    break;
+                }
+            }
+        }
 
         function showStep(step) {
             // Hide all steps
@@ -406,126 +585,6 @@
                 showStep(currentStep);
             }
         });
-
-        document.getElementById('shelterRegistrationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Show the verification modal
-            document.getElementById('verificationModal').classList.remove('hidden');
-            
-            // Gather all form data
-            const shelterData = {
-                name: document.getElementById('shelterName').value,
-                ein: document.getElementById('ein').value,
-                stateLicense: document.getElementById('stateLicense').value,
-                usdaLicense: document.getElementById('usdaLicense').value,
-                yearsInOperation: parseInt(document.getElementById('yearsInOperation').value) || 0,
-                address: document.getElementById('address').value,
-                city: document.getElementById('city').value,
-                state: document.getElementById('state').value,
-                zip: document.getElementById('zip').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                website: document.getElementById('website').value,
-                socialMedia: {
-                    facebook: document.getElementById('facebook').value,
-                    instagram: document.getElementById('instagram').value,
-                    twitter: document.getElementById('twitter').value
-                },
-                references: [
-                    {
-                        name: document.getElementById('vetName1').value,
-                        role: 'Veterinarian',
-                        contact: document.getElementById('vetContact1').value
-                    },
-                    {
-                        name: document.getElementById('vetName2').value,
-                        role: 'Veterinarian',
-                        contact: document.getElementById('vetContact2').value
-                    }
-                ].filter(ref => ref.name && ref.contact),
-                documents: [
-                    { type: 'tax_exempt', name: '501(c)(3) Documentation', url: '#tax-exempt-doc' },
-                    { type: 'state_license', name: 'State License', url: '#state-license-doc' },
-                    { type: 'photos', name: 'Facility Photos', url: '#facility-photos' }
-                ],
-                referralCode: document.getElementById('referralCode').value
-            };
-            
-            try {
-                // Step 1: Update verification steps UI
-                updateVerificationStep('Document Analysis', 'processing');
-                
-                // Step 2: Run the AI-assisted verification
-                const verificationResult = await ShelterVerification.verifyShelter(shelterData);
-                
-                updateVerificationStep('Document Analysis', 'completed');
-                updateVerificationStep('Tax Status Verification', 'processing');
-                
-                // Short delay to simulate the process
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                updateVerificationStep('Tax Status Verification', 'completed');
-                updateVerificationStep('License Verification', 'processing');
-                
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                updateVerificationStep('License Verification', 'completed');
-                updateVerificationStep('Reference Checks', 'processing');
-                
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                updateVerificationStep('Reference Checks', 'completed');
-                updateVerificationStep('Blockchain Registration', 'processing');
-                
-                // Submit for manual review
-                const submitResult = await ShelterVerification.submitForManualReview(
-                    shelterData, 
-                    verificationResult
-                );
-                
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                updateVerificationStep('Blockchain Registration', 'completed');
-                
-                // Update UI with completion message
-                document.getElementById('verificationStatus').innerHTML = 'Verification complete! Your application has been submitted for review.';
-                
-                // Hide modal after a delay
-                setTimeout(() => {
-                    document.getElementById('verificationModal').classList.add('hidden');
-                    
-                    // Show success message with referral code
-                    document.getElementById('shelterRegistrationForm').classList.add('hidden');
-                    document.getElementById('successMessage').classList.remove('hidden');
-                    document.getElementById('shelterReferralCode').textContent = submitResult.referralCode;
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Verification error:', error);
-                document.getElementById('verificationStatus').innerHTML = 'An error occurred during verification. Please try again.';
-                setTimeout(() => {
-                    document.getElementById('verificationModal').classList.add('hidden');
-                }, 3000);
-            }
-        });
-        
-        function updateVerificationStep(stepName, status) {
-            const steps = document.getElementById('verificationSteps').querySelectorAll('li');
-            
-            for (const step of steps) {
-                if (step.textContent.trim() === stepName) {
-                    // Clear existing status indicators
-                    step.classList.remove('text-gray-500');
-                    step.innerHTML = step.innerHTML.replace(/<i.*?<\/i>/g, '');
-                    
-                    if (status === 'processing') {
-                        step.innerHTML = `<i class="fas fa-circle-notch fa-spin text-orange-500 mr-2"></i>${stepName}`;
-                    } else if (status === 'completed') {
-                        step.innerHTML = `<i class="fas fa-check-circle text-green-500 mr-2"></i>${stepName}`;
-                    } else if (status === 'failed') {
-                        step.innerHTML = `<i class="fas fa-times-circle text-red-500 mr-2"></i>${stepName}`;
-                    }
-                    break;
-                }
-            }
-        }
 
         // Initialize first step
         showStep(1);
