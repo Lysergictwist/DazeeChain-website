@@ -303,6 +303,58 @@ class DazeeWallet {
         setInterval(() => this.updatePrice(), 5000); // Update every 5 seconds
         this.updatePrice(); // Initial update
     }
+
+    // Connect to external wallet (MetaMask, etc.)
+    static async connectExternalWallet() {
+        // Check if MetaMask is installed
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                // Request account access
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const address = accounts[0];
+                
+                // Save connected wallet info
+                const walletData = {
+                    address,
+                    isExternal: true,
+                    provider: 'MetaMask',
+                    connected: true,
+                    connectionTime: new Date().toISOString()
+                };
+                
+                localStorage.setItem('connectedExternalWallet', JSON.stringify(walletData));
+                
+                // Dispatch event for UI updates
+                const event = new CustomEvent('walletConnected', { detail: walletData });
+                document.dispatchEvent(event);
+                
+                return walletData;
+            } catch (error) {
+                console.error('Error connecting to wallet:', error);
+                throw error;
+            }
+        } else {
+            // MetaMask not installed
+            const error = new Error('MetaMask not installed');
+            error.code = 'NO_METAMASK';
+            throw error;
+        }
+    }
+    
+    // Check if wallet is connected
+    static isWalletConnected() {
+        const walletData = JSON.parse(localStorage.getItem('connectedExternalWallet'));
+        return walletData && walletData.connected;
+    }
+    
+    // Disconnect external wallet
+    static disconnectExternalWallet() {
+        localStorage.removeItem('connectedExternalWallet');
+        
+        // Dispatch event for UI updates
+        const event = new CustomEvent('walletDisconnected');
+        document.dispatchEvent(event);
+    }
 }
 
 // Initialize DazeeCoin ticker when the page loads

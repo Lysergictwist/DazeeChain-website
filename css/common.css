@@ -1,0 +1,114 @@
+/* Common Styles for DazeeChain Website */
+
+body {
+    background-color: #000000;
+    color: #e5e5e5;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #ff6b35, #f98c41);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+}
+
+/* Dropdown Menu Styles */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #111111;
+    border: 1px solid #222222;
+    border-radius: 0.5rem;
+    width: 250px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    z-index: 50;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.dropdown-toggle i {
+    margin-right: 0.5rem;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #e5e5e5;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 107, 53, 0.1);
+    color: #ff6b35;
+}
+
+.dropdown-item i {
+    margin-right: 0.75rem;
+    width: 20px;
+    text-align: center;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #222222;
+    margin: 0;
+}
+
+.dropdown.active .dropdown-menu {
+    display: block;
+}
+
+/* Mobile Menu Styles */
+.mobile-menu {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.mobile-menu.show {
+    transform: translateX(0);
+}
+
+.backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (min-width: 640px) {
+    .mobile-menu {
+        transform: none;
+    }
+}
+
+:root {
+    --banner-height: 36px;
+    --nav-height: 64px;
+    --total-header-height: calc(var(--banner-height) + var(--nav-height));
+}

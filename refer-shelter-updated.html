@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refer a Shelter - DazeeChain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add wallet.js and referral-rewards.js -->
+    <script src="js/wallet.js" defer></script>
+    <script src="js/referral-rewards.js" defer></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-orange-500">DazeeChain</a>
+                <div class="hidden md:block">
+                    <a href="dashboard.html" class="text-gray-700 hover:text-orange-500 px-3 py-2">Dashboard</a>
+                    <a href="login.html" id="loginLink" class="text-gray-700 hover:text-orange-500 px-3 py-2">Login</a>
+                    <a href="register.html" id="registerLink" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-2xl mx-auto mt-12 px-4">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Refer a Shelter</h1>
+            
+            <!-- Reward Information Banner -->
+            <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-6 rounded">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-gift text-orange-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">
+                            Earn <span class="font-bold">50 DazeeCoins</span> for each shelter you refer that joins our network!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-gray-600 mb-8">Know a local animal shelter that could benefit from DazeeChain? Let us know about them, and we'll reach out with information about our project.</p>
+
+            <!-- Wallet Check Alert (hidden by default) -->
+            <div id="walletAlert" class="hidden bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-yellow-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm">
+                            You need a DazeeChain wallet to earn referral rewards. 
+                            <a href="register.html" class="font-bold underline">Create one now</a> or 
+                            <a href="login.html" class="font-bold underline">log in</a> to your existing account.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="shelterReferralForm" class="space-y-6">
+                <!-- Your Information -->
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Information</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="yourName">Your Name</label>
+                            <input type="text" id="yourName" required
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="yourEmail">Your Email</label>
+                            <input type="email" id="yourEmail" required
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shelter Information -->
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Shelter Information</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="shelterName">Shelter Name</label>
+                            <input type="text" id="shelterName" required
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="shelterLocation">Location (City, State)</label>
+                            <input type="text" id="shelterLocation" required
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                                   placeholder="e.g., San Francisco, CA">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="shelterWebsite">Website (if known)</label>
+                            <input type="url" id="shelterWebsite"
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                                   placeholder="https://">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="contactPerson">Contact Person (if known)</label>
+                            <input type="text" id="contactPerson"
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="contactEmail">Contact Email (if known)</label>
+                            <input type="email" id="contactEmail"
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reward Type Selection -->
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Choose Your Reward</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="rewardDazeecoin" name="rewardType" value="dazeecoin" checked
+                                   class="h-4 w-4 text-orange-500 focus:ring-orange-400">
+                            <label for="rewardDazeecoin" class="ml-2 block text-gray-700">
+                                <span class="font-medium">50 DazeeCoins</span> - Added directly to your wallet
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="rewardEvent" name="rewardType" value="event"
+                                   class="h-4 w-4 text-orange-500 focus:ring-orange-400">
+                            <label for="rewardEvent" class="ml-2 block text-gray-700">
+                                <span class="font-medium">Special Event</span> - Get invited to our next community event
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div>
+                    <label class="block text-gray-700 mb-2" for="additionalInfo">Why would this shelter be a good fit for DazeeChain?</label>
+                    <textarea id="additionalInfo" rows="4"
+                              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-orange-500"
+                              placeholder="Tell us about the shelter and why you think they would benefit from joining DazeeChain..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600 transition duration-200">
+                    Submit Referral
+                </button>
+            </form>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check text-2xl text-green-500"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Thank You!</h2>
+                    <p class="text-gray-600 mb-6">
+                        We've received your shelter referral and will reach out to them soon. Thank you for helping us grow the DazeeChain community!
+                    </p>
+                    <div class="space-y-3">
+                        <button onclick="window.location.href='dashboard.html'" class="bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-600 transition duration-200">
+                            View Your Referrals
+                        </button>
+                        <button onclick="window.location.href='index.html'" class="block w-full text-gray-500 hover:text-gray-700">
+                            Return to Homepage
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referral History Section -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mt-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Referral History</h2>
+            <div id="referralHistory" class="min-h-[200px]">
+                <div class="flex justify-center items-center h-[200px]">
+                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if user has a wallet
+            const walletData = JSON.parse(localStorage.getItem('dazeeWallet'));
+            if (!walletData) {
+                document.getElementById('walletAlert').classList.remove('hidden');
+            } else {
+                // Update login/register links if user is logged in
+                document.getElementById('loginLink').classList.add('hidden');
+                document.getElementById('registerLink').textContent = 'My Account';
+                document.getElementById('registerLink').href = 'dashboard.html';
+            }
+            
+            // Load referral history
+            try {
+                await referralRewards.displayReferralHistory('referralHistory');
+            } catch (error) {
+                console.error('Error loading referral history:', error);
+                document.getElementById('referralHistory').innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">Please log in to view your referral history.</p>
+                    </div>
+                `;
+            }
+            
+            // Handle form submission
+            document.getElementById('shelterReferralForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Check if user has a wallet
+                const walletData = JSON.parse(localStorage.getItem('dazeeWallet'));
+                if (!walletData) {
+                    document.getElementById('walletAlert').classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                
+                // Get form data
+                const formData = {
+                    referrer: {
+                        name: document.getElementById('yourName').value,
+                        email: document.getElementById('yourEmail').value
+                    },
+                    shelter_name: document.getElementById('shelterName').value,
+                    shelter_email: document.getElementById('contactEmail').value || null,
+                    reward_type: document.querySelector('input[name="rewardType"]:checked').value,
+                    reward_amount: 50, // Default amount
+                    reward_event: document.querySelector('input[name="rewardType"]:checked').value === 'event' 
+                        ? { type: 'community_event', description: 'Invitation to next community event' } 
+                        : null,
+                    additionalInfo: document.getElementById('additionalInfo').value
+                };
+                
+                try {
+                    // Submit the referral
+                    await referralRewards.submitReferral(formData);
+                    
+                    // Show success modal
+                    document.getElementById('successModal').classList.remove('hidden');
+                    
+                    // Reload referral history
+                    await referralRewards.displayReferralHistory('referralHistory');
+                } catch (error) {
+                    console.error('Error submitting referral:', error);
+                    alert('There was an error submitting your referral. Please try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story - DazeeChain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .story-section {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        .story-section h2 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ff6b35;
+        }
+        
+        .story-section p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .story-section ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+        
+        .story-section li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .story-section li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #ff6b35;
+        }
+        
+        .highlight-box {
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 4px solid #ff6b35;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <!-- Navigation -->
+    <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50" style="top: 40px;">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-3xl sm:text-4xl font-bold gradient-text">DazeeChain</a>
+                
+                <!-- Desktop Menu (hidden on mobile) -->
+                <div class="hidden sm:flex items-center space-x-8">
+                    <!-- Connect Wallet Button -->
+                    <button id="connectWalletBtn" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 flex items-center">
+                        <i class="fas fa-wallet mr-2"></i>
+                        <span id="walletBtnText">Connect Wallet</span>
+                    </button>
+                    
+                    <div class="dropdown">
+                        <div class="dropdown-toggle" id="userMenuToggle">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Menu</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </div>
+                        <div class="dropdown-menu" id="userDropdownMenu">
+                            <a href="login.html" class="dropdown-item">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Log In / Sign Up
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="shelter-management.html" class="dropdown-item">
+                                <i class="fas fa-building"></i>
+                                Register/Refer Shelter
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="our-story.html" class="dropdown-item">
+                                <i class="fas fa-book-open"></i>
+                                Our Story
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="whitepaper.html" class="dropdown-item">
+                                <i class="fas fa-file-alt"></i>
+                                Whitepaper
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="dazeecoin.html" class="dropdown-item">
+                                <i class="fas fa-coins"></i>
+                                DazeeCoin
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="pawprintz.html" class="dropdown-item">
+                                <i class="fas fa-paw"></i>
+                                PawPrintz
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="faq.html" class="dropdown-item">
+                                <i class="fas fa-question-circle"></i>
+                                FAQ
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="contact.html" class="dropdown-item">
+                                <i class="fas fa-envelope"></i>
+                                Contact Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="sm:hidden flex items-center space-x-4">
+                    <!-- Mobile Connect Wallet Button -->
+                    <button id="mobileConnectWalletBtn" class="text-orange-500 hover:text-orange-400 focus:outline-none">
+                        <i class="fas fa-wallet text-2xl"></i>
+                    </button>
+                    
+                    <button id="mobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Backdrop -->
+        <div id="menuBackdrop" class="backdrop fixed inset-0 z-40 sm:hidden"></div>
+
+        <!-- Mobile Menu Sidebar -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 sm:hidden">
+            <div class="flex justify-end p-4">
+                <button id="closeMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="px-4 py-2">
+                <div class="space-y-4">
+                    <!-- Mobile Connect Wallet Option -->
+                    <a href="#" class="dropdown-item" id="mobileWalletConnect">
+                        <i class="fas fa-wallet"></i>
+                        Connect Wallet
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="login.html" class="dropdown-item">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Log In / Sign Up
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="shelter-management.html" class="dropdown-item">
+                        <i class="fas fa-building"></i>
+                        Register/Refer Shelter
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="our-story.html" class="dropdown-item">
+                        <i class="fas fa-book-open"></i>
+                        Our Story
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="whitepaper.html" class="dropdown-item">
+                        <i class="fas fa-file-alt"></i>
+                        Whitepaper
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="dazeecoin.html" class="dropdown-item">
+                        <i class="fas fa-coins"></i>
+                        DazeeCoin
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="pawprintz.html" class="dropdown-item">
+                        <i class="fas fa-paw"></i>
+                        PawPrintz
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="faq.html" class="dropdown-item">
+                        <i class="fas fa-question-circle"></i>
+                        FAQ
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="contact.html" class="dropdown-item">
+                        <i class="fas fa-envelope"></i>
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Our Story Content -->
+    <div class="container mx-auto px-4 pt-32 pb-20">
+        <div class="mb-12 flex justify-center">
+            <div class="relative inline-block">
+                <img src="images/dazee-new.jpg" alt="Dazee - Our Inspiration" class="rounded-full w-48 h-48 object-cover shadow-lg border-4 border-orange-500" title="Meet Dazee - The inspiration behind DazeeChain" onerror="this.src='images/dazee.jpg'">
+                <div class="absolute -top-4 -right-4 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                    Our Inspiration
+                </div>
+            </div>
+        </div>
+        
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-12">
+            <span class="gradient-text">Our Story:</span> The Inspiration Behind DazeeChain
+        </h1>
+        
+        <div class="story-section">
+            <p class="text-xl">
+                <strong class="text-orange-500">Dazee isn't just my dog</strong>—she's my best friend, my shadow, and the heart behind this entire project. She's a three-year-old red heeler with boundless energy and a love for catching frisbees. But before she found her forever home with me, her future was uncertain. Dazee was a rescue, like so many other dogs who end up in shelters through no fault of their own.
+            </p>
+            
+            <p class="text-lg">
+                When I adopted her, I saw firsthand the overwhelming number of animals waiting behind shelter walls. Some had been abandoned, others were strays, and many were simply victims of circumstances beyond their control. Shelters do everything they can to help, but they are stretched thin, constantly battling overcrowding, underfunding, and the heartbreaking reality that not every animal will make it out.
+            </p>
+            
+            <h2>The Challenge: Supporting Shelters and Their Mission</h2>
+            <p>Shelters across the country face enormous challenges:</p>
+            
+            <ul>
+                <li><strong>Overcrowding & Euthanasia:</strong> More animals come in than find homes, forcing shelters to make devastating decisions.</li>
+                <li><strong>Unstable Funding:</strong> Many shelters rely on donations and grants that fluctuate, leaving them struggling to cover food, medical care, and operational costs.</li>
+                <li><strong>Adoption Hesitancy:</strong> Many people still choose breeders or pet stores over adoption, simply because they aren't aware of the options or incentives.</li>
+                <li><strong>Lost Histories:</strong> Adopted pets often come with little to no medical or behavioral history, making it harder for new owners to provide the best care.</li>
+                <li><strong>Lack of Post-Adoption Support:</strong> Many new pet owners don't have the guidance they need to ensure their pets stay healthy and cared for long-term.</li>
+            </ul>
+            
+            <h2>The Solution: A System That Works for Shelters, Adopters, and Animals</h2>
+            <p>
+                DazeeCoin isn't just a cryptocurrency—it's a movement. It's designed to bring real-world utility to pet adoption and shelter support using blockchain technology.
+            </p>
+            
+            <div class="highlight-box">
+                <p class="text-lg mb-4"><strong>Here's how it makes an impact:</strong></p>
+                <ul>
+                    <li><strong>Shelters Receive Consistent Support:</strong> A portion of every DazeeCoin transaction is automatically distributed to registered shelters, giving them an ongoing source of funding.</li>
+                    <li><strong>Adoption Incentives:</strong> People who adopt shelter pets receive DazeeCoin as a reward, encouraging more adoptions and reducing shelter overcrowding.</li>
+                    <li><strong>Vet & Care Rewards:</strong> Pet owners who keep up with vet visits, vaccinations, and routine care can earn additional rewards, promoting lifelong pet health.</li>
+                    <li><strong>PawPrintz: A Digital Pet History</strong> – Every adopted animal gets a blockchain-secured record, ensuring that medical history and key info are never lost, no matter where they go.</li>
+                    <li><strong>Community Growth:</strong> Anyone can refer a shelter to the network, expanding support and increasing awareness about pet adoption.</li>
+                </ul>
+            </div>
+            
+            <h2>Why This Matters</h2>
+            <p>
+                Dazee was one of the lucky ones—she got her second chance. But there are thousands of animals still waiting for theirs. This project is about making sure more pets get the same opportunity that Dazee did.
+            </p>
+            
+            <p>
+                DazeeChain and DazeeCoin create a future where shelters don't have to struggle, where adopters are encouraged and rewarded, and where every animal gets the love and care they deserve.
+            </p>
+            
+            <div class="text-center mt-10 mb-8">
+                <p class="text-2xl font-bold gradient-text">Let's improve animal welfare, one adoption at a time.</p>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="index.html" class="inline-block bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300">
+                    <i class="fas fa-home mr-2"></i> Back to Home
+                </a>
+                <a href="shelter-management.html" class="inline-block bg-gradient-to-r from-gray-700 to-gray-800 text-white px-6 py-3 rounded-lg hover:from-gray-600 hover:to-gray-700 transition duration-300 ml-4">
+                    <i class="fas fa-building mr-2"></i> Register/Refer a Shelter
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center">
+                <p class="text-gray-400 mb-4">&copy; 2025 DazeeChain. All rights reserved.</p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-orange-500 transition duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-orange-500 transition duration-300">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-orange-500 transition duration-300">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-orange-500 transition duration-300">
+                        <i class="fab fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Wallet Scripts -->
+    <script src="js/wallet.js"></script>
+    <script src="js/wallet-connect.js"></script>
+    <script src="js/menu.js"></script>
+    
+    <!-- Dropdown Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize wallet connection
+            const connectWalletBtn = document.getElementById('connectWalletBtn');
+            if (connectWalletBtn) {
+                connectWalletBtn.addEventListener('click', async () => {
+                    try {
+                        await DazeeWallet.connectExternalWallet();
+                        connectWalletBtn.textContent = 'Connected';
+                        connectWalletBtn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+                        connectWalletBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+                    } catch (error) {
+                        console.error('Error connecting wallet:', error);
+                        alert('Failed to connect wallet. Please make sure you have MetaMask installed.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
