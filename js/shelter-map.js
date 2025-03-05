@@ -24,31 +24,50 @@ function initMap() {
 }
 
 function initEventListeners() {
-    // Add event listener for search button
-    document.getElementById('searchButton').addEventListener('click', searchLocation);
-    
-    // Add event listener for Enter key in search input
-    document.getElementById('locationInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            searchLocation();
-        }
-    });
+    const searchButton = document.getElementById('searchButton');
+    const locationInput = document.getElementById('locationInput');
+
+    if (searchButton && locationInput) {
+        // Add event listener for search button
+        searchButton.addEventListener('click', searchLocation);
+        
+        // Add event listener for Enter key in search input
+        locationInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchLocation();
+            }
+        });
+    } else {
+        console.error('Search elements not found');
+    }
 }
 
 // Search for location using Mapbox Geocoding API
 async function searchLocation() {
-    const query = document.getElementById('locationInput').value;
-    if (!query) return;
+    const locationInput = document.getElementById('locationInput');
+    if (!locationInput) {
+        console.error('Location input not found');
+        return;
+    }
+
+    const query = locationInput.value.trim();
+    if (!query) {
+        alert('Please enter a location to search');
+        return;
+    }
 
     try {
+        console.log('Searching for location:', query);
         const response = await fetch(
             `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${CONFIG.MAPBOX_TOKEN}&country=US`
         );
         
         const data = await response.json();
+        console.log('Geocoding response:', data);
         
         if (data.features && data.features.length > 0) {
             const [lng, lat] = data.features[0].center;
+            console.log('Found coordinates:', lng, lat);
             
             // Fly to location
             map.flyTo({
@@ -59,6 +78,8 @@ async function searchLocation() {
             
             // Search for shelters
             searchNearbyShelters(lat, lng);
+        } else {
+            alert('Location not found. Please try a different search.');
         }
     } catch (error) {
         console.error('Error searching location:', error);
@@ -69,12 +90,14 @@ async function searchLocation() {
 // Search for nearby shelters using Mapbox Places API
 async function searchNearbyShelters(lat, lng) {
     try {
+        console.log('Searching for shelters near:', lat, lng);
         // Use Mapbox Tilequery API to find animal shelters
         const response = await fetch(
             `https://api.mapbox.com/v4/mapbox.poi-places/tilequery/${lng},${lat}.json?radius=10000&limit=50&access_token=${CONFIG.MAPBOX_TOKEN}`
         );
         
         const data = await response.json();
+        console.log('Shelter search response:', data);
         
         // Filter for animal shelters and veterinarians
         const shelters = data.features.filter(feature => 
@@ -83,6 +106,7 @@ async function searchNearbyShelters(lat, lng) {
             feature.properties.category_en?.toLowerCase().includes('veterinar')
         );
         
+        console.log('Found shelters:', shelters);
         displayShelters(shelters);
     } catch (error) {
         console.error('Error searching shelters:', error);
@@ -95,6 +119,11 @@ function displayShelters(shelters) {
     // Clear existing markers and results
     clearMarkers();
     const resultsList = document.getElementById('resultsList');
+    if (!resultsList) {
+        console.error('Results list element not found');
+        return;
+    }
+    
     resultsList.innerHTML = '';
     
     if (shelters.length === 0) {
@@ -125,16 +154,12 @@ function displayShelters(shelters) {
                     .setHTML(`
                         <h3 class="font-bold text-lg mb-2">${name}</h3>
                         <p class="text-gray-300">${address}</p>
-                        <div class="mt-3 flex gap-2">
+                        <div class="mt-3">
                             <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" 
                                target="_blank" 
                                class="bg-orange-500 px-3 py-1 rounded text-sm hover:bg-orange-600 transition">
                                 Get Directions
                             </a>
-                            <button onclick="window.saveFavorite('${name}', ${lat}, ${lng})"
-                                    class="bg-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-600 transition">
-                                Save
-                            </button>
                         </div>
                     `)
             )
@@ -148,14 +173,10 @@ function displayShelters(shelters) {
         card.innerHTML = `
             <h3 class="font-bold text-lg">${name}</h3>
             <p class="text-gray-400">${address}</p>
-            <div class="mt-3 flex gap-2">
+            <div class="mt-3">
                 <button onclick="window.flyToMarker(${index})"
-                        class="flex-1 bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition">
+                        class="w-full bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition">
                     View on Map
-                </button>
-                <button onclick="window.saveFavorite('${name}', ${lat}, ${lng})"
-                        class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition">
-                    <i class="far fa-heart"></i>
                 </button>
             </div>
         `;
