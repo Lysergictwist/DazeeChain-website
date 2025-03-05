@@ -317,45 +317,47 @@
         }
     </style>
 </head>
-<body class="bg-black text-white">
+                                Register/Refer Shelter
     <!-- Navigation -->
     <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50" style="top: 40px;">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-6">
-                    <a href="index.html" class="text-4xl sm:text-5xl font-bold gradient-text logo-text">DazeeChain</a>
-                    
-                    <!-- DazeeChain Scout Dropdown -->
-                    <div class="scout-dropdown">
-                        <button class="scout-button" id="scoutButton">
-                            <i class="fas fa-compass"></i>
-                            DazeeChain Scout
-                            <i class="fas fa-chevron-down ml-2"></i>
-                        </button>
-                        <div class="scout-content" id="scoutDropdown">
-                            <div class="scout-item">
-                                <i class="fas fa-home"></i>
-                                <span>Find Shelters</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-tree"></i>
-                                <span>Dog Parks & Trails</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-store"></i>
-                                <span>Pet Stores</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-hospital"></i>
-                                <span>Veterinarians</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-hotel"></i>
-                                <span>Pet-Friendly Places</span>
-                            </div>
+                <!-- Scout button on the left -->
+                <div class="scout-dropdown">
+                    <button class="scout-button" id="scoutButton">
+                        <i class="fas fa-compass"></i>
+                        DazeeChain Scout
+                        <i class="fas fa-chevron-down ml-2"></i>
+                    </button>
+                    <div class="scout-content" id="scoutDropdown">
+                        <div class="scout-item">
+                            <i class="fas fa-home"></i>
+                            <span>Find Shelters</span>
+                        </div>
+                        <div class="scout-item">
+                            <i class="fas fa-tree"></i>
+                            <span>Dog Parks & Trails</span>
+                        </div>
+                        <div class="scout-item">
+                            <i class="fas fa-store"></i>
+                            <span>Pet Stores</span>
+                        </div>
+                        <div class="scout-item">
+                            <i class="fas fa-hospital"></i>
+                            <span>Veterinarians</span>
+                        </div>
+                        <div class="scout-item">
+                            <i class="fas fa-hotel"></i>
+                            <span>Pet-Friendly Places</span>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Logo in the center -->
+                <div class="flex-1 flex justify-center">
+                    <a href="index.html" class="text-4xl sm:text-5xl font-bold gradient-text logo-text">DazeeChain</a>
+                </div>
+                
                 <!-- Desktop Menu (hidden on mobile) -->
                 <div class="hidden sm:flex items-center space-x-8">
                     <!-- Connect Wallet Button -->
@@ -380,18 +382,18 @@
                                 <i class="fas fa-building"></i>
                                 Register/Refer Shelter
                             </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="our-story.html" class="dropdown-item">
-                                <i class="fas fa-book-open"></i>
-                                Our Story
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="whitepaper.html" class="dropdown-item">
-                                <i class="fas fa-file-alt"></i>
-                                Whitepaper
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="dazeecoin.html" class="dropdown-item">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <div class="sm:hidden">
+                    <button id="mobileMenuToggle" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
                                 <i class="fas fa-coins"></i>
                                 DazeeCoin
                             </a>
