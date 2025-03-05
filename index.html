@@ -59,181 +59,107 @@
         .feature-card {
             background: #0d0d0d;
             border: 1px solid #2a2a2a;
-            border-radius: 1rem;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 107, 53, 0.1);
-            border-radius: 12px;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            width: 100%;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .section-header {
             text-align: center;
-            margin-bottom: 4rem;
-            padding-top: 4rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #a0a0a0;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .secondary-button {
+            background: rgba(255, 107, 53, 0.1);
+            color: #ff6b35;
+            border: 1px solid #ff6b35;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .secondary-button:hover {
+            background: rgba(255, 107, 53, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .hero-section {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1)), url('assets/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 8rem 1rem 4rem;
+            text-align: center;
         }
 
         .section-title {
             font-size: 2.5rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff6b35, #ff8f35);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
             margin-bottom: 1rem;
-        }
-
-        .section-subtitle {
-            color: #999999;
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 640px) {
-            .mobile-banner {
-                font-size: 0.875rem;
-                padding: 0.5rem 1rem;
-            }
-            
-            .mobile-nav {
-                padding: 0.5rem 1rem;
-            }
-            
-            .mobile-hero {
-                padding-top: 8rem;
-            }
-        }
-
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .mobile-menu.show {
-            transform: translateX(0);
-        }
-
-        .backdrop {
-            background: rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .backdrop.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        @media (min-width: 640px) {
-            .mobile-menu {
-                transform: none;
-            }
-        }
-
-        :root {
-            --banner-height: 36px;
-            --nav-height: 64px;
-            --total-header-height: calc(var(--banner-height) + var(--nav-height));
-        }
-        
-        .dropdown {
             position: relative;
             display: inline-block;
         }
 
-        .dropdown-menu {
-            display: none;
+        .section-title::after {
+            content: '';
             position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
-            background: #111111;
-            border: 1px solid #222222;
-            border-radius: 0.5rem;
-            width: 250px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            z-index: 9999;
+            bottom: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b35, #f98c41);
+            border-radius: 3px;
         }
 
-        .dropdown.active .dropdown-menu {
-            display: block;
+        .section-subtitle {
+            color: #a0a0a0;
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
         }
 
-        .dropdown-toggle {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-toggle:hover {
-            background: rgba(255, 107, 53, 0.1);
-        }
-
-        .dropdown-toggle i {
-            margin-right: 0.5rem;
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: #e5e5e5;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-item:hover {
-            background: rgba(255, 107, 53, 0.1);
-            color: #ff6b35;
-        }
-
-        .dropdown-item i {
-            margin-right: 0.75rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #222222;
-            margin: 0;
-        }
-
-        @media (min-width: 640px) {
+        @media (min-width: 768px) {
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -272,22 +198,20 @@
         
         .scout-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(255, 107, 53, 0.1), 0 2px 4px -1px rgba(255, 107, 53, 0.06);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
         
         .scout-content {
             display: none;
             position: absolute;
-            top: 100%;
-            left: 0;
+            min-width: 200px;
             background-color: #111111;
-            min-width: 250px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #333333;
             border-radius: 0.5rem;
-            border: 1px solid #222222;
-            z-index: 1000;
-            padding: 0.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            z-index: 1;
             margin-top: 0.5rem;
+            overflow: hidden;
         }
         
         .scout-content.show {
@@ -322,542 +246,192 @@
     <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50" style="top: 40px;">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-6">
+                <!-- DazeeChain Scout Dropdown on the left -->
+                <div class="scout-dropdown">
+                    <button class="scout-button" id="scoutButton">
+                        <i class="fas fa-compass"></i>
+                        DazeeChain Scout
+                        <i class="fas fa-chevron-down ml-2"></i>
+                    </button>
+                    <div class="scout-content" id="scoutDropdown">
+                        <div class="scout-item">
+                            <i class="fas fa-home"></i>
+                            <span>Find Shelters</span>
+                        </div>
+                        <div class="scout-item">
+                            <i class="fas fa-tree"></i>
+                            <span>Dog Parks & Trails</span>
+                        </div>
+                        <div class="scout-item">
+                            <i class="fas fa-store"></i>
+                            <span>Pet Stores</span>
+                        </div>
+                        <div class="scout-item">
+                            <i class="fas fa-hospital"></i>
+                            <span>Veterinarians</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Logo in the center -->
+                <div class="flex-1 flex justify-center">
                     <a href="index.html" class="text-4xl sm:text-5xl font-bold gradient-text logo-text">DazeeChain</a>
-                    
-                    <!-- DazeeChain Scout Dropdown -->
-                    <div class="scout-dropdown">
-                        <button class="scout-button" id="scoutButton">
-                            <i class="fas fa-compass"></i>
-                            DazeeChain Scout
-                            <i class="fas fa-chevron-down ml-2"></i>
-                        </button>
-                        <div class="scout-content" id="scoutDropdown">
-                            <div class="scout-item">
-                                <i class="fas fa-home"></i>
-                                <span>Find Shelters</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-tree"></i>
-                                <span>Dog Parks & Trails</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-store"></i>
-                                <span>Pet Stores</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-hospital"></i>
-                                <span>Veterinarians</span>
-                            </div>
-                            <div class="scout-item">
-                                <i class="fas fa-hotel"></i>
-                                <span>Pet-Friendly Places</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <!-- Desktop Menu (hidden on mobile) -->
-                <div class="hidden sm:flex items-center space-x-8">
-                    <!-- Connect Wallet Button -->
-                    <button id="connectWalletBtn" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 flex items-center">
-                        <i class="fas fa-wallet mr-2"></i>
-                        <span id="walletBtnText">Connect Wallet</span>
-                    </button>
-                    
-                    <div class="dropdown">
-                        <button class="dropdown-toggle flex items-center space-x-2 text-gray-300 hover:text-white focus:outline-none" id="userMenuToggle">
-                            <i class="fas fa-user-circle"></i>
-                            <span class="ml-2">Menu</span>
-                            <i class="fas fa-chevron-down ml-2"></i>
-                        </button>
-                        <div class="dropdown-menu" id="userDropdownMenu">
-                            <a href="login.html" class="dropdown-item">
-                                <i class="fas fa-sign-in-alt"></i>
-                                Log In / Sign Up
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="shelter-management.html" class="dropdown-item">
-                                <i class="fas fa-building"></i>
-                                Register/Refer Shelter
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="our-story.html" class="dropdown-item">
-                                <i class="fas fa-book-open"></i>
-                                Our Story
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="whitepaper.html" class="dropdown-item">
-                                <i class="fas fa-file-alt"></i>
-                                Whitepaper
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="dazeecoin.html" class="dropdown-item">
-                                <i class="fas fa-coins"></i>
-                                DazeeCoin
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="pawprintz.html" class="dropdown-item">
-                                <i class="fas fa-paw"></i>
-                                PawPrintz
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="faq.html" class="dropdown-item">
-                                <i class="fas fa-question-circle"></i>
-                                FAQ
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="contact.html" class="dropdown-item">
-                                <i class="fas fa-envelope"></i>
-                                Contact Us
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="sm:hidden flex items-center space-x-4">
-                    <!-- Mobile Connect Wallet Button -->
-                    <button id="mobileConnectWalletBtn" class="text-orange-500 hover:text-orange-400 focus:outline-none">
-                        <i class="fas fa-wallet text-2xl"></i>
-                    </button>
-                    
-                    <button id="mobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
+                
+                <!-- Empty div for spacing on the right -->
+                <div class="w-32"></div>
             </div>
         </div>
-
-        <!-- Mobile Menu Backdrop -->
-        <div id="menuBackdrop" class="backdrop fixed inset-0 z-40 sm:hidden"></div>
-
-        <!-- Mobile Menu Sidebar -->
-        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 sm:hidden">
-                    <div class="flex justify-end p-4">
-                        <button id="closeMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
-                            <i class="fas fa-times text-2xl"></i>
-                        </button>
-                    </div>
-                    <div class="px-4 py-2">
-                        <div class="space-y-4">
-                            <!-- Mobile Connect Wallet Option -->
-                            <a href="#" class="dropdown-item" id="mobileWalletConnect">
-                                <i class="fas fa-wallet"></i>
-                                Connect Wallet
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="login.html" class="dropdown-item">
-                                <i class="fas fa-sign-in-alt"></i>
-                                Log In / Sign Up
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="shelter-management.html" class="dropdown-item">
-                                <i class="fas fa-building"></i>
-                                Register/Refer Shelter
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="our-story.html" class="dropdown-item">
-                                <i class="fas fa-book-open"></i>
-                                Our Story
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="whitepaper.html" class="dropdown-item">
-                                <i class="fas fa-file-alt"></i>
-                                Whitepaper
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="dazeecoin.html" class="dropdown-item">
-                                <i class="fas fa-coins"></i>
-                                DazeeCoin
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="pawprintz.html" class="dropdown-item">
-                                <i class="fas fa-paw"></i>
-                                PawPrintz
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="faq.html" class="dropdown-item">
-                                <i class="fas fa-question-circle"></i>
-                                FAQ
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="contact.html" class="dropdown-item">
-                                <i class="fas fa-envelope"></i>
-                                Contact Us
-                            </a>
-                        </div>
-                    </div>
-                </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-20 bg-black">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center">
-                <div class="mb-12 flex justify-center">
-                    <div class="relative inline-block">
-                        <img src="images/dazee-new.jpg" alt="Dazee - Our Inspiration" class="dazee-img rounded-full w-48 h-48 object-cover shadow-lg border-4 border-orange-500" title="Meet Dazee - The inspiration behind DazeeChain" onerror="this.src='images/dazee.jpg'">
-                        <div class="absolute -top-4 -right-4 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
-                            Our Inspiration
-                        </div>
-                    </div>
-                </div>
-                <h1 class="text-5xl font-bold mb-6 text-white">Using <span class="gradient-text">Blockchain</span> and <span class="gradient-text">AI</span> to fund shelters, reward adoptions, and ensure YOUR PET'S health records are always at your fingertips</h1>
-                <p class="text-xl text-gray-400 mb-6">The first comprehensive ecosystem for pet adoption, health records, and shelter support powered by DazeeCoin (DZ) and PawPrintz</p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="shelter-management.html" class="inline-block bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-5 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 text-2xl font-bold transform hover:scale-105 shadow-lg hero-button flex items-center justify-center">
-                        <i class="fas fa-building mr-3"></i> Register/Refer Shelter
-                    </a>
-                </div>
-                <div class="mt-4 flex justify-center">
-                    <a href="register.html" class="inline-block bg-white text-orange-500 border-2 border-orange-500 px-8 py-3 rounded-lg hover:bg-orange-50 transition duration-300 text-lg font-semibold transform hover:scale-105 shadow-lg">
-                        <i class="fas fa-arrow-right mr-2"></i> Get Started
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Announcement Banner -->
+    <div class="bg-gradient-to-r from-orange-600 to-orange-500 text-white text-center py-2 px-4 fixed w-full z-50">
+        <p class="text-sm md:text-base">🎉 <span class="font-bold">DazeeChain</span> is revolutionizing pet adoption! <a href="#" class="underline font-bold">Learn more</a></p>
+    </div>
 
-    <!-- Ecosystem Section -->
-    <section class="py-20 bg-black border-t border-gray-900">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12 text-white">The DazeeChain <span class="gradient-text">Ecosystem</span></h2>
-            <div class="grid md:grid-cols-2 gap-12">
-                <div class="feature-card rounded-lg p-8">
-                    <div class="text-orange-500 text-4xl mb-4">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 text-orange-500">DazeeCoin (DZ)</h3>
-                    <p class="text-gray-400 mb-4">
-                        Native cryptocurrency built on Polygon for low fees and fast transactions. DZ incentivizes responsible pet ownership and supports animal welfare.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-400 space-y-2">
-                        <li>1 Billion DZ total supply</li>
-                        <li>Built on Polygon (Ethereum L2)</li>
-                        <li>Deflationary tokenomics</li>
-                        <li>Real-world utility focused</li>
-                    </ul>
-                </div>
-                <div class="feature-card rounded-lg p-8">
-                    <div class="text-orange-500 text-4xl mb-4">
-                        <i class="fas fa-paw"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 text-orange-500">PawPrintz</h3>
-                    <p class="text-gray-400 mb-4">
-                        Blockchain-powered digital record system that securely stores and manages your pet's complete identity and health history on our private blockchain or locally on your device.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-400 space-y-2">
-                        <li>Verified adoption records</li>
-                        <li>Secure vet history</li>
-                        <li>Vaccination tracking</li>
-                        <li>Owner-controlled sharing</li>
-                        <li>Dual storage options (blockchain/local)</li>
-                    </ul>
-                </div>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Revolutionizing <span class="gradient-text">Pet Ownership</span> with Blockchain</h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">DazeeChain is transforming how people adopt, care for, and connect with their pets through secure, transparent blockchain technology.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#" class="cta-button">Get Started</a>
+                <a href="#" class="secondary-button">Learn More</a>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="bg-black py-16">
+    <section class="py-20">
         <div class="features-section">
-            <div class="section-header">
-                <h2 class="section-title">DazeeChain Features, Benefits, and Vision</h2>
-                <p class="section-subtitle">Empowering animal welfare through innovative technology, community engagement, and secure pet management solutions</p>
-            </div>
+            <h2 class="section-title text-center">Why Choose DazeeChain?</h2>
+            <p class="section-subtitle text-center">Our innovative platform offers unique benefits for pet owners and shelters alike.</p>
+            
             <div class="features-grid">
-                <!-- Adoption Support -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3 class="feature-title">Adoption Support & Incentives</h3>
-                    <ul class="feature-list">
-                        <li>Adoption rewards in DazeeCoin</li>
-                        <li>Digital adoption certificates</li>
-                        <li>Adoption history tracking</li>
-                        <li>Post-adoption support resources</li>
-                    </ul>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Secure Pet Records</h3>
+                    <p>Store all your pet's important information securely on the blockchain, from medical records to ownership history.</p>
                 </div>
-
-                <!-- Pet Care & Health -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
-                    <h3 class="feature-title">Pet Care & Health</h3>
-                    <ul class="feature-list">
-                        <li>Secure digital health records</li>
-                        <li>Personal pet passport system</li>
-                        <li>Vet visit scheduling</li>
-                        <li>Emergency medical alerts</li>
-                    </ul>
+                
+                <div class="feature-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Transparent Adoption</h3>
+                    <p>Our transparent adoption process ensures pets go to loving homes with complete history verification.</p>
                 </div>
-
-                <!-- Lost Pet Recovery -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-search-location"></i>
-                    </div>
-                    <h3 class="feature-title">Lost Pet Recovery Network</h3>
-                    <ul class="feature-list">
-                        <li>Digital ID system</li>
-                        <li>Real-time lost pet alerts</li>
-                        <li>Community search network</li>
-                        <li>Smart QR code pet tags</li>
-                    </ul>
+                
+                <div class="feature-card">
+                    <i class="fas fa-coins"></i>
+                    <h3>DazeeCoin Rewards</h3>
+                    <p>Earn DazeeCoin for responsible pet ownership, which can be used for discounts on pet services.</p>
                 </div>
-
-                <!-- Shelter Support -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <h3 class="feature-title">Shelter Support System</h3>
-                    <ul class="feature-list">
-                        <li>Direct donations</li>
-                        <li>Resource management</li>
-                        <li>Emergency fund access</li>
-                        <li>Shelter network sharing</li>
-                    </ul>
+                
+                <div class="feature-card">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Vet Integration</h3>
+                    <p>Connect with veterinarians who can access and update your pet's medical records on the blockchain.</p>
                 </div>
-
-                <!-- Community Engagement -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="feature-title">Community Engagement</h3>
-                    <ul class="feature-list">
-                        <li>Volunteer coordination</li>
-                        <li>Foster care network</li>
-                        <li>Community events</li>
-                        <li>Business partnerships</li>
-                    </ul>
+                
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Community Support</h3>
+                    <p>Join a community of pet lovers who share advice, resources, and support for all pet owners.</p>
                 </div>
-
-                <!-- Technology -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Technology & Innovation</h3>
-                    <ul class="feature-list">
-                        <li>Private blockchain pet data storage</li>
-                        <li>Dual storage options (blockchain or local device)</li>
-                        <li>Secure & immutable pet records</li>
-                        <li>Cross-platform mobile app</li>
-                        <li>Offline access support</li>
-                    </ul>
-                </div>
-
-                <!-- Financial Benefits -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                    <h3 class="feature-title">Financial Benefits</h3>
-                    <ul class="feature-list">
-                        <li>DazeeCoin rewards</li>
-                        <li>Donation tracking</li>
-                        <li>Expense management</li>
-                        <li>Tax documentation</li>
-                    </ul>
-                </div>
-
-                <!-- Data & Analytics -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="feature-title">Data & Analytics</h3>
-                    <ul class="feature-list">
-                        <li>Personal pet analytics</li>
-                        <li>Health trend tracking</li>
-                        <li>Custom reports</li>
-                        <li>Data visualization</li>
-                    </ul>
-                </div>
-
-                <!-- Education -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3 class="feature-title">Education & Training</h3>
-                    <ul class="feature-list">
-                        <li>Pet care tutorials</li>
-                        <li>Training resources</li>
-                        <li>Best practices guides</li>
-                        <li>Community workshops</li>
-                    </ul>
-                </div>
-
-                <!-- User Experience -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3 class="feature-title">User Experience</h3>
-                    <ul class="feature-list">
-                        <li>Intuitive interface</li>
-                        <li>Quick data access</li>
-                        <li>Customizable profiles</li>
-                        <li>Multi-device sync</li>
-                    </ul>
-                </div>
-
-                <!-- Future Growth -->
-                <div class="bg-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-8 transition-all duration-300 hover:border-orange-500">
-                    <div class="feature-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h3 class="feature-title">Future Growth</h3>
-                    <ul class="feature-list">
-                        <li>Feature expansion</li>
-                        <li>Network growth</li>
-                        <li>Enhanced security</li>
-                        <li>Community-driven updates</li>
-                    </ul>
+                
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Access</h3>
+                    <p>Access your pet's information anytime, anywhere with our mobile-friendly platform.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Tokenomics -->
-    <section class="py-20 bg-black border-t border-gray-900" id="tokenomics">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12 text-white">Token<span class="gradient-text">omics</span></h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="feature-card rounded-lg p-6">
-                    <div class="text-orange-500 text-4xl mb-4">
-                        <i class="fas fa-donate"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-white">Shelter Support</h3>
-                    <p class="text-gray-400">40% of tokens allocated to verified shelter monthly distributions</p>
-                </div>
-                
-                <div class="feature-card rounded-lg p-6">
-                    <div class="text-orange-500 text-4xl mb-4">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-white">Liquidity Pool</h3>
-                    <p class="text-gray-400">30% of tokens locked in liquidity pool for 2 years</p>
-                </div>
-                
-                <div class="feature-card rounded-lg p-6">
-                    <div class="text-orange-500 text-4xl mb-4">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-white">Community Growth</h3>
-                    <p class="text-gray-400">30% reserved for marketing, development, and community initiatives</p>
-                </div>
-            </div>
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-5xl mx-auto text-center px-4">
+            <h2 class="text-4xl font-bold mb-6">Ready to Join the Revolution?</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">Be part of the future of pet care and adoption. Sign up today to experience the benefits of blockchain for you and your furry friends.</p>
+            <a href="#" class="cta-button text-lg px-8 py-3">Get Started Now</a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-black py-12 border-t border-gray-900">
+    <footer class="bg-black border-t border-gray-800 py-12">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="gradient-text text-2xl mb-4">DazeeChain</h3>
-                    <p class="text-gray-400">Revolutionizing pet adoption through blockchain technology</p>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-orange-500">Home</a></li>
-                        <li><a href="#tokenomics" class="hover:text-orange-500">Tokenomics</a></li>
-                        <li><a href="whitepaper.html" class="hover:text-orange-500">Whitepaper</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Connect</h4>
-                    <div class="flex space-x-4 text-gray-400">
-                        <a href="#" class="hover:text-orange-500"><i class="fab fa-twitter text-2xl"></i></a>
-                        <a href="#" class="hover:text-orange-500"><i class="fab fa-discord text-2xl"></i></a>
-                        <a href="#" class="hover:text-orange-500"><i class="fab fa-telegram text-2xl"></i></a>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">DazeeChain</h3>
+                    <p class="text-gray-400 mb-4">Revolutionizing pet adoption and care with blockchain technology.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-orange-500 transition"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-orange-500 transition"><i class="fab fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-orange-500 transition"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-orange-500 transition"><i class="fab fa-github text-xl"></i></a>
                     </div>
                 </div>
-            </div>
-            <div class="mt-12 pt-8 border-t border-gray-900 text-center text-gray-400">
-                <div class="flex flex-wrap justify-center gap-4 mb-4">
-                    <a href="whitepaper.html" class="hover:text-orange-500">Whitepaper</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-orange-500">Terms of Service</a>
-                    <span class="text-gray-700">|</span>
-                    <a href="#" class="hover:text-orange-500">Contact</a>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">Features</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">Whitepaper</a></li>
+                    </ul>
                 </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">API</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-orange-500 transition">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-envelope text-orange-500 mt-1"></i>
+                            <span class="text-gray-400">info@dazeechain.com</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-map-marker-alt text-orange-500 mt-1"></i>
+                            <span class="text-gray-400">123 Blockchain Ave, San Francisco, CA</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-phone text-orange-500 mt-1"></i>
+                            <span class="text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
                 <p>&copy; 2025 DazeeChain. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
+        // Toggle Scout dropdown
         document.addEventListener('DOMContentLoaded', function() {
-            // Desktop dropdown menu
-            const menuToggle = document.getElementById('userMenuToggle');
-            const dropdownMenu = document.getElementById('userDropdownMenu');
-            
-            if (menuToggle && dropdownMenu) {
-                menuToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (dropdownMenu.style.display === 'block') {
-                        dropdownMenu.style.display = 'none';
-                    } else {
-                        dropdownMenu.style.display = 'block';
-                    }
-                });
-
-                // Close when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                        dropdownMenu.style.display = 'none';
-                    }
-                });
-            }
-
-            // Mobile menu
-            const mobileMenuBtn = document.getElementById('mobileMenuButton');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuBackdrop = document.getElementById('menuBackdrop');
-            const closeMenuBtn = document.getElementById('closeMenuButton');
-
-            if (mobileMenuBtn && mobileMenu && menuBackdrop && closeMenuBtn) {
-                mobileMenuBtn.addEventListener('click', function() {
-                    mobileMenu.classList.add('show');
-                    menuBackdrop.classList.add('show');
-                    document.body.style.overflow = 'hidden';
-                });
-
-                function closeMenu() {
-                    mobileMenu.classList.remove('show');
-                    menuBackdrop.classList.remove('show');
-                    document.body.style.overflow = '';
-                }
-
-                closeMenuBtn.addEventListener('click', closeMenu);
-                menuBackdrop.addEventListener('click', closeMenu);
-                mobileMenu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', closeMenu);
-                });
-            }
-            
-            // Scout dropdown functionality
             const scoutButton = document.getElementById('scoutButton');
             const scoutDropdown = document.getElementById('scoutDropdown');
             
-            scoutButton.addEventListener('click', function(e) {
-                e.stopPropagation();
+            scoutButton.addEventListener('click', function() {
                 scoutDropdown.classList.toggle('show');
             });
             
             // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!scoutDropdown.contains(e.target) && !scoutButton.contains(e.target)) {
-                    scoutDropdown.classList.remove('show');
+            window.addEventListener('click', function(event) {
+                if (!event.target.matches('#scoutButton') && !event.target.closest('#scoutButton')) {
+                    if (scoutDropdown.classList.contains('show')) {
+                        scoutDropdown.classList.remove('show');
+                    }
                 }
             });
         });
