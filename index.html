@@ -319,56 +319,25 @@
 </head>
                                 Register/Refer Shelter
     <!-- Navigation -->
-    <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50" style="top: 40px;">
+    <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50" style="top: 0;">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <!-- Scout button on the left -->
-                <div class="scout-dropdown">
-                    <button class="scout-button" id="scoutButton">
-                        <i class="fas fa-compass"></i>
-                        DazeeChain Scout
-                        <i class="fas fa-chevron-down ml-2"></i>
-                    </button>
-                    <div class="scout-content" id="scoutDropdown">
-                        <div class="scout-item">
-                            <i class="fas fa-home"></i>
-                            <span>Find Shelters</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-tree"></i>
-                            <span>Dog Parks & Trails</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-store"></i>
-                            <span>Pet Stores</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-hospital"></i>
-                            <span>Veterinarians</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-hotel"></i>
-                            <span>Pet-Friendly Places</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- Empty div for spacing on the left -->
+                <div class="w-32"></div>
                 
                 <!-- Logo in the center -->
                 <div class="flex-1 flex justify-center">
                     <a href="index.html" class="text-4xl sm:text-5xl font-bold gradient-text logo-text">DazeeChain</a>
                 </div>
                 
-                <!-- Desktop Menu (hidden on mobile) -->
-                <div class="hidden sm:flex items-center space-x-8">
-                    <!-- Connect Wallet Button -->
+                <!-- Right side menu -->
+                <div class="flex items-center space-x-4">
                     <button id="connectWalletBtn" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 flex items-center">
-                        <i class="fas fa-wallet mr-2"></i>
                         <span id="walletBtnText">Connect Wallet</span>
                     </button>
                     
                     <div class="dropdown">
                         <button class="dropdown-toggle flex items-center space-x-2 text-gray-300 hover:text-white focus:outline-none" id="userMenuToggle">
-                            <i class="fas fa-user-circle"></i>
                             <span class="ml-2">Menu</span>
                             <i class="fas fa-chevron-down ml-2"></i>
                         </button>
@@ -385,136 +354,19 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Mobile Menu Toggle -->
-                <div class="sm:hidden">
-                    <button id="mobileMenuToggle" class="text-gray-300 hover:text-white focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
             </div>
         </div>
-                                <i class="fas fa-coins"></i>
-                                DazeeCoin
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="pawprintz.html" class="dropdown-item">
-                                <i class="fas fa-paw"></i>
-                                PawPrintz
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="faq.html" class="dropdown-item">
-                                <i class="fas fa-question-circle"></i>
-                                FAQ
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="contact.html" class="dropdown-item">
-                                <i class="fas fa-envelope"></i>
-                                Contact Us
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="sm:hidden flex items-center space-x-4">
-                    <!-- Mobile Connect Wallet Button -->
-                    <button id="mobileConnectWalletBtn" class="text-orange-500 hover:text-orange-400 focus:outline-none">
-                        <i class="fas fa-wallet text-2xl"></i>
-                    </button>
-                    
-                    <button id="mobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Backdrop -->
-        <div id="menuBackdrop" class="backdrop fixed inset-0 z-40 sm:hidden"></div>
-
-        <!-- Mobile Menu Sidebar -->
-        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-gray-900 z-50 sm:hidden">
-                    <div class="flex justify-end p-4">
-                        <button id="closeMenuButton" class="text-gray-300 hover:text-white focus:outline-none">
-                            <i class="fas fa-times text-2xl"></i>
-                        </button>
-                    </div>
-                    <div class="px-4 py-2">
-                        <div class="space-y-4">
-                            <!-- Mobile Connect Wallet Option -->
-                            <a href="#" class="dropdown-item" id="mobileWalletConnect">
-                                <i class="fas fa-wallet"></i>
-                                Connect Wallet
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="login.html" class="dropdown-item">
-                                <i class="fas fa-sign-in-alt"></i>
-                                Log In / Sign Up
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="shelter-management.html" class="dropdown-item">
-                                <i class="fas fa-building"></i>
-                                Register/Refer Shelter
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="our-story.html" class="dropdown-item">
-                                <i class="fas fa-book-open"></i>
-                                Our Story
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="whitepaper.html" class="dropdown-item">
-                                <i class="fas fa-file-alt"></i>
-                                Whitepaper
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="dazeecoin.html" class="dropdown-item">
-                                <i class="fas fa-coins"></i>
-                                DazeeCoin
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="pawprintz.html" class="dropdown-item">
-                                <i class="fas fa-paw"></i>
-                                PawPrintz
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="faq.html" class="dropdown-item">
-                                <i class="fas fa-question-circle"></i>
-                                FAQ
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="contact.html" class="dropdown-item">
-                                <i class="fas fa-envelope"></i>
-                                Contact Us
-                            </a>
-                        </div>
-                    </div>
-                </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-20 bg-black">
-        <div class="max-w-7xl mx-auto px-4">
+    <section class="hero-section">
+        <div class="max-w-5xl mx-auto">
             <div class="text-center">
-                <div class="mb-12 flex justify-center">
-                    <div class="relative inline-block">
-                        <img src="images/dazee-new.jpg" alt="Dazee - Our Inspiration" class="dazee-img rounded-full w-48 h-48 object-cover shadow-lg border-4 border-orange-500" title="Meet Dazee - The inspiration behind DazeeChain" onerror="this.src='images/dazee.jpg'">
-                        <div class="absolute -top-4 -right-4 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
-                            Our Inspiration
-                        </div>
-                    </div>
-                </div>
-                <h1 class="text-5xl font-bold mb-6 text-white">Using <span class="gradient-text">Blockchain</span> and <span class="gradient-text">AI</span> to fund shelters, reward adoptions, and ensure YOUR PET'S health records are always at your fingertips</h1>
-                <p class="text-xl text-gray-400 mb-6">The first comprehensive ecosystem for pet adoption, health records, and shelter support powered by DazeeCoin (DZ) and PawPrintz</p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="shelter-management.html" class="inline-block bg-gradient-to-r from-orange-500 to-orange-600 text-white px-10 py-5 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 text-2xl font-bold transform hover:scale-105 shadow-lg hero-button flex items-center justify-center">
-                        <i class="fas fa-building mr-3"></i> Register/Refer Shelter
-                    </a>
-                </div>
-                <div class="mt-4 flex justify-center">
-                    <a href="register.html" class="inline-block bg-white text-orange-500 border-2 border-orange-500 px-8 py-3 rounded-lg hover:bg-orange-50 transition duration-300 text-lg font-semibold transform hover:scale-105 shadow-lg">
-                        <i class="fas fa-arrow-right mr-2"></i> Get Started
-                    </a>
+                <img src="assets/dog-profile.jpg" alt="Dog Profile" class="rounded-full w-32 h-32 mx-auto mb-8 border-4 border-orange-500">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Revolutionizing Pet Adoption with <span class="text-orange-500">Blockchain Technology</span> and <span class="text-orange-500">AI</span></h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">The first comprehensive ecosystem for pet adoption, health records, and shelter support powered by DazeeCoin (DZ) and PawPrintz</p>
+                <div class="flex justify-center">
+                    <a href="shelter-management.html" class="cta-button">Register/Refer Shelter</a>
                 </div>
             </div>
         </div>
