@@ -9,12 +9,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- OpenLayers CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.15.1/css/ol.css">
-    
     <!-- Mapbox GL CSS -->
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
     
@@ -40,14 +34,24 @@
             border-color: #ff6b35;
             transform: translateY(-2px);
         }
-        .map-toggle-btn {
-            @apply px-4 py-2 rounded-lg transition-colors;
+        .mapboxgl-popup {
+            max-width: 300px;
         }
-        .map-toggle-btn.active {
-            @apply bg-orange-500 text-white;
+        .mapboxgl-popup-content {
+            background: rgba(17, 17, 17, 0.95);
+            color: white;
+            border: 1px solid #ff6b35;
+            padding: 15px;
         }
-        .map-toggle-btn:not(.active) {
-            @apply bg-gray-800 text-gray-300 hover:bg-gray-700;
+        .mapboxgl-popup-close-button {
+            color: white;
+        }
+        .marker {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -64,19 +68,6 @@
     <!-- Main Content -->
     <div class="pt-32 pb-20">
         <div class="max-w-7xl mx-auto px-4">
-            <!-- Map Provider Toggle -->
-            <div class="flex justify-center gap-4 mb-8">
-                <button class="map-toggle-btn active" data-provider="mapbox">
-                    <i class="fab fa-map mr-2"></i>Mapbox
-                </button>
-                <button class="map-toggle-btn" data-provider="leaflet">
-                    <i class="fas fa-leaf mr-2"></i>Leaflet
-                </button>
-                <button class="map-toggle-btn" data-provider="openlayers">
-                    <i class="fas fa-globe mr-2"></i>OpenLayers
-                </button>
-            </div>
-
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Search Panel -->
                 <div class="search-box p-6 rounded-lg">
