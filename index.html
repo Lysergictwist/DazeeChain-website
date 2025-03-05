@@ -321,46 +321,53 @@
     <!-- Navigation -->
     <nav class="bg-black border-b border-gray-800 shadow-lg fixed w-full z-50" style="top: 40px;">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center h-16 relative">
+            <div class="grid grid-cols-3 items-center h-16">
                 <!-- Left Side - Scout Button -->
-                <div class="scout-dropdown">
-                    <button class="scout-button" id="scoutButton">
-                        <i class="fas fa-compass"></i>
-                        DazeeChain Scout
-                        <i class="fas fa-chevron-down ml-2"></i>
-                    </button>
-                    <div class="scout-content" id="scoutDropdown">
-                        <div class="scout-item">
-                            <i class="fas fa-home"></i>
-                            <span>Find Shelters</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-tree"></i>
-                            <span>Dog Parks & Trails</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-store"></i>
-                            <span>Pet Stores</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-hospital"></i>
-                            <span>Veterinarians</span>
-                        </div>
-                        <div class="scout-item">
-                            <i class="fas fa-hotel"></i>
-                            <span>Pet-Friendly Places</span>
+                <div class="flex items-center">
+                    <div class="scout-dropdown">
+                        <button class="scout-button" id="scoutButton">
+                            <i class="fas fa-compass"></i>
+                            DazeeChain Scout
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        <div class="scout-content" id="scoutDropdown">
+                            <div class="scout-item">
+                                <i class="fas fa-home"></i>
+                                <span>Find Shelters</span>
+                            </div>
+                            <div class="scout-item">
+                                <i class="fas fa-tree"></i>
+                                <span>Dog Parks & Trails</span>
+                            </div>
+                            <div class="scout-item">
+                                <i class="fas fa-store"></i>
+                                <span>Pet Stores</span>
+                            </div>
+                            <div class="scout-item">
+                                <i class="fas fa-hospital"></i>
+                                <span>Veterinarians</span>
+                            </div>
+                            <div class="scout-item">
+                                <i class="fas fa-hotel"></i>
+                                <span>Pet-Friendly Places</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Center - Logo -->
-                <div class="absolute left-1/2 transform -translate-x-1/2">
+                <div class="flex justify-center">
                     <a href="index.html" class="text-4xl sm:text-5xl font-bold gradient-text logo-text whitespace-nowrap">DazeeChain</a>
                 </div>
 
                 <!-- Right Side - Connect Wallet -->
-                <div class="flex items-center">
+                <div class="flex justify-end gap-4">
+                    <a href="login.html" class="bg-transparent border-2 border-orange-500 text-orange-500 px-6 py-2 rounded-lg hover:bg-orange-500 hover:text-white transition duration-300 transform hover:scale-105 flex items-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Log In
+                    </a>
                     <button id="connectWalletBtn" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-wallet mr-2"></i>
                         Connect Wallet
                     </button>
                 </div>
