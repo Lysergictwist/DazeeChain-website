@@ -1,293 +1,188 @@
-// Map instances
-let mapboxMap, leafletMap, olMap;
-let currentProvider = 'mapbox';
+// Map instance and markers array
+let map;
 let markers = [];
 
-// Initialize all map providers
-function initMaps() {
-    initMapbox();
-    initLeaflet();
-    initOpenLayers();
-    
-    // Show default provider
-    showMap('mapbox');
-    
-    // Add event listeners for map toggle buttons
-    document.querySelectorAll('.map-toggle-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const provider = btn.dataset.provider;
-            showMap(provider);
-            
-            // Update active state
-            document.querySelectorAll('.map-toggle-btn').forEach(b => 
-                b.classList.toggle('active', b === btn)
-            );
-        });
-    });
-}
+// Initialize map when the page loads
+document.addEventListener('DOMContentLoaded', initMap);
 
-// Mapbox Implementation
-function initMapbox() {
+function initMap() {
     mapboxgl.accessToken = CONFIG.MAPBOX_TOKEN;
     
-    mapboxMap = new mapboxgl.Map({
+    // Initialize map
+    map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/dark-v10',
+        style: 'mapbox://styles/mapbox/dark-v11',
         center: CONFIG.MAP_CENTER,
         zoom: CONFIG.DEFAULT_ZOOM
     });
-    
+
     // Add navigation controls
-    mapboxMap.addControl(new mapboxgl.NavigationControl());
-}
-
-// Leaflet Implementation
-function initLeaflet() {
-    leafletMap = L.map('map', {
-        center: CONFIG.MAP_CENTER.reverse(),
-        zoom: CONFIG.DEFAULT_ZOOM,
-        style: 'mapbox://styles/mapbox/dark-v10'
+    map.addControl(new mapboxgl.NavigationControl());
+    
+    // Add event listener for search button
+    document.querySelector('button[onclick="searchLocation()"]').addEventListener('click', searchLocation);
+    
+    // Add event listener for Enter key in search input
+    document.getElementById('locationInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchLocation();
+        }
     });
-    
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(leafletMap);
-}
-
-// OpenLayers Implementation
-function initOpenLayers() {
-    olMap = new ol.Map({
-        target: 'map',
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM()
-            })
-        ],
-        view: new ol.View({
-            center: ol.proj.fromLonLat(CONFIG.MAP_CENTER),
-            zoom: CONFIG.DEFAULT_ZOOM
-        })
-    });
-}
-
-// Show selected map provider
-function showMap(provider) {
-    currentProvider = provider;
-    const mapElement = document.getElementById('map');
-    
-    // Reset map container
-    mapElement.innerHTML = '';
-    
-    switch(provider) {
-        case 'mapbox':
-            mapboxMap = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/dark-v10',
-                center: CONFIG.MAP_CENTER,
-                zoom: CONFIG.DEFAULT_ZOOM
-            });
-            break;
-            
-        case 'leaflet':
-            leafletMap = L.map('map').setView(CONFIG.MAP_CENTER.reverse(), CONFIG.DEFAULT_ZOOM);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(leafletMap);
-            break;
-            
-        case 'openlayers':
-            olMap = new ol.Map({
-                target: 'map',
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    })
-                ],
-                view: new ol.View({
-                    center: ol.proj.fromLonLat(CONFIG.MAP_CENTER),
-                    zoom: CONFIG.DEFAULT_ZOOM
-                })
-            });
-            break;
-    }
 }
 
 // Search for location using Mapbox Geocoding API
 async function searchLocation() {
     const query = document.getElementById('locationInput').value;
-    const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${CONFIG.MAPBOX_TOKEN}`;
-    
+    if (!query) return;
+
     try {
-        const response = await fetch(endpoint);
+        const response = await fetch(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${CONFIG.MAPBOX_TOKEN}&country=US`
+        );
+        
         const data = await response.json();
         
         if (data.features && data.features.length > 0) {
             const [lng, lat] = data.features[0].center;
             
-            // Center map based on current provider
-            switch(currentProvider) {
-                case 'mapbox':
-                    mapboxMap.flyTo({
-                        center: [lng, lat],
-                        zoom: 12
-                    });
-                    break;
-                    
-                case 'leaflet':
-                    leafletMap.flyTo([lat, lng], 12);
-                    break;
-                    
-                case 'openlayers':
-                    olMap.getView().animate({
-                        center: ol.proj.fromLonLat([lng, lat]),
-                        zoom: 12
-                    });
-                    break;
-            }
+            // Fly to location
+            map.flyTo({
+                center: [lng, lat],
+                zoom: 12,
+                essential: true
+            });
             
-            // Search for nearby shelters
+            // Search for shelters
             searchNearbyShelters(lat, lng);
         }
     } catch (error) {
         console.error('Error searching location:', error);
+        alert('Error searching location. Please try again.');
     }
 }
 
-// Search for nearby shelters using Overpass API (OpenStreetMap data)
+// Search for nearby shelters using Mapbox Places API
 async function searchNearbyShelters(lat, lng) {
-    const radius = 10000; // 10km radius
-    const query = `
-        [out:json][timeout:25];
-        (
-          node["animal"="shelter"](around:${radius},${lat},${lng});
-          way["animal"="shelter"](around:${radius},${lat},${lng});
-          relation["animal"="shelter"](around:${radius},${lat},${lng});
-        );
-        out body;
-        >;
-        out skel qt;
-    `;
-    
     try {
-        const response = await fetch('https://overpass-api.de/api/interpreter', {
-            method: 'POST',
-            body: query
-        });
+        // Use Mapbox Tilequery API to find animal shelters
+        const response = await fetch(
+            `https://api.mapbox.com/v4/mapbox.poi-places/tilequery/${lng},${lat}.json?radius=10000&limit=50&access_token=${CONFIG.MAPBOX_TOKEN}`
+        );
         
         const data = await response.json();
-        displayShelters(data.elements);
+        
+        // Filter for animal shelters and veterinarians
+        const shelters = data.features.filter(feature => 
+            feature.properties.category_en?.toLowerCase().includes('animal') ||
+            feature.properties.category_en?.toLowerCase().includes('pet') ||
+            feature.properties.category_en?.toLowerCase().includes('veterinar')
+        );
+        
+        displayShelters(shelters);
     } catch (error) {
         console.error('Error searching shelters:', error);
+        alert('Error finding shelters. Please try again.');
     }
 }
 
-// Display shelters on the map and in the results list
+// Display shelters on map and in results list
 function displayShelters(shelters) {
+    // Clear existing markers and results
     clearMarkers();
     const resultsList = document.getElementById('resultsList');
     resultsList.innerHTML = '';
     
-    shelters.forEach(shelter => {
-        // Add marker based on current provider
-        addMarker(shelter);
+    if (shelters.length === 0) {
+        resultsList.innerHTML = `
+            <div class="p-4 bg-gray-800 rounded-lg">
+                <p class="text-gray-300">No animal shelters found in this area.</p>
+                <p class="text-gray-400 text-sm mt-2">Try searching a different location or expanding your search radius.</p>
+            </div>
+        `;
+        return;
+    }
+
+    shelters.forEach((shelter, index) => {
+        const [lng, lat] = shelter.geometry.coordinates;
+        const name = shelter.properties.name || 'Unnamed Shelter';
+        const address = shelter.properties.address || 'Address not available';
+        
+        // Create marker
+        const markerEl = document.createElement('div');
+        markerEl.className = 'marker';
+        markerEl.innerHTML = `<i class="fas fa-paw text-orange-500 text-2xl"></i>`;
+        
+        // Add marker to map
+        const marker = new mapboxgl.Marker(markerEl)
+            .setLngLat([lng, lat])
+            .setPopup(
+                new mapboxgl.Popup({ offset: 25 })
+                    .setHTML(`
+                        <h3 class="font-bold text-lg mb-2">${name}</h3>
+                        <p class="text-gray-300">${address}</p>
+                        <div class="mt-3 flex gap-2">
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" 
+                               target="_blank" 
+                               class="bg-orange-500 px-3 py-1 rounded text-sm hover:bg-orange-600 transition">
+                                Get Directions
+                            </a>
+                            <button onclick="saveFavorite('${name}', ${lat}, ${lng})"
+                                    class="bg-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-600 transition">
+                                Save
+                            </button>
+                        </div>
+                    `)
+            )
+            .addTo(map);
+        
+        markers.push(marker);
         
         // Add to results list
         const card = document.createElement('div');
         card.className = 'shelter-card p-4 rounded-lg';
         card.innerHTML = `
-            <h3 class="font-bold text-lg">${shelter.tags.name || 'Unnamed Shelter'}</h3>
-            <p class="text-gray-400">${shelter.tags.address || 'No address available'}</p>
-            <button onclick="focusMarker(${shelter.id})"
-                    class="mt-3 w-full bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition">
-                View on Map
-            </button>
+            <h3 class="font-bold text-lg">${name}</h3>
+            <p class="text-gray-400">${address}</p>
+            <div class="mt-3 flex gap-2">
+                <button onclick="flyToMarker(${index})"
+                        class="flex-1 bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition">
+                    View on Map
+                </button>
+                <button onclick="saveFavorite('${name}', ${lat}, ${lng})"
+                        class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
         `;
         resultsList.appendChild(card);
     });
 }
 
-// Add marker to the map based on current provider
-function addMarker(shelter) {
-    const lat = shelter.lat;
-    const lng = shelter.lon;
-    
-    switch(currentProvider) {
-        case 'mapbox':
-            const marker = new mapboxgl.Marker()
-                .setLngLat([lng, lat])
-                .addTo(mapboxMap);
-            markers.push(marker);
-            break;
-            
-        case 'leaflet':
-            const lMarker = L.marker([lat, lng]).addTo(leafletMap);
-            markers.push(lMarker);
-            break;
-            
-        case 'openlayers':
-            const feature = new ol.Feature({
-                geometry: new ol.geom.Point(ol.proj.fromLonLat([lng, lat]))
-            });
-            
-            const vectorSource = new ol.source.Vector({
-                features: [feature]
-            });
-            
-            const vectorLayer = new ol.layer.Vector({
-                source: vectorSource
-            });
-            
-            olMap.addLayer(vectorLayer);
-            markers.push(vectorLayer);
-            break;
-    }
-}
-
-// Clear all markers
+// Clear all markers from the map
 function clearMarkers() {
-    switch(currentProvider) {
-        case 'mapbox':
-            markers.forEach(marker => marker.remove());
-            break;
-            
-        case 'leaflet':
-            markers.forEach(marker => leafletMap.removeLayer(marker));
-            break;
-            
-        case 'openlayers':
-            markers.forEach(layer => olMap.removeLayer(layer));
-            break;
-    }
+    markers.forEach(marker => marker.remove());
     markers = [];
 }
 
-// Focus on a specific marker
-function focusMarker(shelterId) {
-    const shelter = markers.find(m => m.id === shelterId);
-    if (shelter) {
-        switch(currentProvider) {
-            case 'mapbox':
-                mapboxMap.flyTo({
-                    center: shelter.getLngLat(),
-                    zoom: 15
-                });
-                break;
-                
-            case 'leaflet':
-                leafletMap.flyTo(shelter.getLatLng(), 15);
-                break;
-                
-            case 'openlayers':
-                const extent = shelter.getSource().getExtent();
-                olMap.getView().fit(extent, {
-                    maxZoom: 15,
-                    duration: 500
-                });
-                break;
-        }
+// Fly to specific marker
+function flyToMarker(index) {
+    const marker = markers[index];
+    if (marker) {
+        map.flyTo({
+            center: marker.getLngLat(),
+            zoom: 15,
+            essential: true
+        });
+        marker.togglePopup();
     }
 }
 
-// Initialize maps when the page loads
-document.addEventListener('DOMContentLoaded', initMaps);
+// Save shelter to favorites (can be expanded later)
+function saveFavorite(name, lat, lng) {
+    // For now, just store in localStorage
+    const favorites = JSON.parse(localStorage.getItem('shelterFavorites') || '[]');
+    favorites.push({ name, lat, lng });
+    localStorage.setItem('shelterFavorites', JSON.stringify(favorites));
+    
+    alert(`${name} has been saved to your favorites!`);
+}
