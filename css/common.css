@@ -9,9 +9,8 @@
     font-display: swap;
 }
 
-/* Apply the font globally */
+/* Variables */
 :root {
-    --primary-font: 'Robit', system-ui, -apple-system, sans-serif;
     --banner-height: 36px;
     --nav-height: 64px;
     --total-header-height: calc(var(--banner-height) + var(--nav-height));
@@ -20,7 +19,10 @@
 body {
     background-color: #000000;
     color: #e5e5e5;
-    font-family: var(--primary-font);
+}
+
+.logo-text {
+    font-family: 'Robit', system-ui, -apple-system, sans-serif;
 }
 
 .gradient-text {
