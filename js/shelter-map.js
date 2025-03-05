@@ -3,7 +3,10 @@ let map;
 let markers = [];
 
 // Initialize map when the page loads
-document.addEventListener('DOMContentLoaded', initMap);
+document.addEventListener('DOMContentLoaded', () => {
+    initMap();
+    initEventListeners();
+});
 
 function initMap() {
     mapboxgl.accessToken = CONFIG.MAPBOX_TOKEN;
@@ -18,9 +21,11 @@ function initMap() {
 
     // Add navigation controls
     map.addControl(new mapboxgl.NavigationControl());
-    
+}
+
+function initEventListeners() {
     // Add event listener for search button
-    document.querySelector('button[onclick="searchLocation()"]').addEventListener('click', searchLocation);
+    document.getElementById('searchButton').addEventListener('click', searchLocation);
     
     // Add event listener for Enter key in search input
     document.getElementById('locationInput').addEventListener('keypress', function(e) {
@@ -126,7 +131,7 @@ function displayShelters(shelters) {
                                class="bg-orange-500 px-3 py-1 rounded text-sm hover:bg-orange-600 transition">
                                 Get Directions
                             </a>
-                            <button onclick="saveFavorite('${name}', ${lat}, ${lng})"
+                            <button onclick="window.saveFavorite('${name}', ${lat}, ${lng})"
                                     class="bg-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-600 transition">
                                 Save
                             </button>
@@ -144,11 +149,11 @@ function displayShelters(shelters) {
             <h3 class="font-bold text-lg">${name}</h3>
             <p class="text-gray-400">${address}</p>
             <div class="mt-3 flex gap-2">
-                <button onclick="flyToMarker(${index})"
+                <button onclick="window.flyToMarker(${index})"
                         class="flex-1 bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition">
                     View on Map
                 </button>
-                <button onclick="saveFavorite('${name}', ${lat}, ${lng})"
+                <button onclick="window.saveFavorite('${name}', ${lat}, ${lng})"
                         class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition">
                     <i class="far fa-heart"></i>
                 </button>
@@ -164,8 +169,8 @@ function clearMarkers() {
     markers = [];
 }
 
-// Fly to specific marker
-function flyToMarker(index) {
+// Make functions available globally for event handlers
+window.flyToMarker = function(index) {
     const marker = markers[index];
     if (marker) {
         map.flyTo({
@@ -175,14 +180,14 @@ function flyToMarker(index) {
         });
         marker.togglePopup();
     }
-}
+};
 
 // Save shelter to favorites (can be expanded later)
-function saveFavorite(name, lat, lng) {
+window.saveFavorite = function(name, lat, lng) {
     // For now, just store in localStorage
     const favorites = JSON.parse(localStorage.getItem('shelterFavorites') || '[]');
     favorites.push({ name, lat, lng });
     localStorage.setItem('shelterFavorites', JSON.stringify(favorites));
     
     alert(`${name} has been saved to your favorites!`);
-}
+};
